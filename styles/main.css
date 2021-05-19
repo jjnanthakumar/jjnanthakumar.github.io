@@ -7248,3 +7248,26 @@ a.credit {
 .section {
   padding-bottom: 0;
 }
+
+.disabledlink{
+  cursor: not-allowed;
+}
+.disabledlink:hover{
+  text-decoration: none !important;
+  color: red;
+}
+
+.btn-tag{
+  outline: 0 !important;
+  background: #10AC84;
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  width: 100%;
+  border: 2.5px solid #10AC84;
+  border-radius: 25px;
+  cursor: not-allowed;
+  transition: 0.5s;
+  transition-property: background, transform;
+}
+
