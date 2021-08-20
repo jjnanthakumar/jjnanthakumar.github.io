@@ -42,15 +42,28 @@ $('a.smooth-scroll')
     }
   });
 
-function getExcelJSON(data) {
+function LoadExcelJSON(data) {
   var workbook = XLSX.read(data, { type: 'base64' });
+  var collections = { certifications: [] }
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
     var roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
     if (roa.length > 0) {
-      result = roa;
+      collections.certifications.push(roa);
     }
   });
-  return result
+  localStorage.setItem('collections', JSON.stringify(collections))
+}
+
+function GetLocalData() {
+  var stored = localStorage.getItem('collections');
+  if (stored) local_collections = JSON.parse(stored);
+  else local_collections = { 'certifications': [] };
+  return local_collections.certifications
+}
+
+function ValidateLocalData(key) {
+  var stored = localStorage.getItem('collections');
+  return stored ? true : false
 }

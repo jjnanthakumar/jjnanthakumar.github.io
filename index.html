@@ -757,20 +757,22 @@
     <script src="scripts/main.js"></script>
     <script>
         var file_url = "https://api.github.com/repos/jjnanthakumar/jjnanthakumar.github.io/contents/portfolios.xlsx"
-        $.ajax({
-            url: file_url,
-            dataType: 'jsonp',
-            headers: {
-                'accept': 'application/vnd.github.VERSION.raw',
-                'Authorization': "token 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"
-            },
-            success: function (results) {
-                var rows = getExcelJSON(results.data.content)
-                console.log(rows)
-                appendData(rows)
-
-            }
-        });
+        if (!ValidateLocalData()) {
+            $.ajax({
+                url: file_url,
+                dataType: 'jsonp',
+                headers: {
+                    'accept': 'application/vnd.github.VERSION.raw',
+                    'Authorization': "token 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"
+                },
+                success: function (results) {
+                    LoadExcelJSON(results.data.content)
+                }
+            });
+        }
+        // Get Local Data from Local Storage
+        var rows = GetLocalData()
+        appendData(rows)
 
         function appendData(rows) {
             var finalContent = ""
