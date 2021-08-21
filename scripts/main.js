@@ -69,7 +69,7 @@ function ValidateLocalData(key) {
 }
 
 $(document).ready(function () {
-  if(ValidateLocalData){
+  if(ValidateLocalData()){
     appendData(GetLocalData().certifications[0])
   }
   $('#showMore').on('click', function (e) {
