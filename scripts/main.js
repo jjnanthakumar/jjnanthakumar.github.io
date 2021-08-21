@@ -71,10 +71,6 @@ function ValidateLocalData(key) {
 $(document).ready(function () {
   $('#showMore').on('click', function (e) {
     e.preventDefault();
-    window.pagination += 5;
-    if (window.pagination >= GetLocalData().length) {
-      window.pagination = 5
-    }
     appendData(GetLocalData())
   });
 });
@@ -84,7 +80,7 @@ window.itemsCount = 0;
 function appendData(rows) {
   var finalContent = ""
   let pagination = 5;
-  for (let i = itemsCount; i < (itemsCount + pagination); i++) {
+  for (let i = window.itemsCount; i < (window.itemsCount + pagination); i++) {
     var item = rows[i];
     var content = `
               <div class="card" id="index${i}">
@@ -112,8 +108,11 @@ function appendData(rows) {
               </div>
       `
     finalContent += content
-    
+
   }
   $('#cert-contents').append(finalContent)
   window.itemsCount += pagination;
+  if (window.itemsCount > rows.length) {
+    $('#showMore').hide();
+  }
 }
