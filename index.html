@@ -767,7 +767,8 @@
                     'Authorization': "token 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"
                 },
                 success: function (results) {
-                    LoadExcelJSON(results.data.content)
+                    LoadExcelJSON(results.data.content);
+                    appendData(GetLocalData().certifications[0])
                 }
             });
         }
