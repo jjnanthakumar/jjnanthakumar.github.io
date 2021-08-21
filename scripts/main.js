@@ -72,9 +72,6 @@ $(document).ready(function () {
   if(ValidateLocalData()){
     appendData(GetLocalData().certifications[0])
   }
-  else{
-    
-  }
   $('#showMore').on('click', function (e) {
     e.preventDefault();
     appendData(GetLocalData().certifications[0])
