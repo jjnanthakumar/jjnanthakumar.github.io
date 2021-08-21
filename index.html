@@ -659,10 +659,11 @@
                     </div>
                 </div>
                 <div class="section" id="achievements">
+                    <div class="h4 text-center mb-4 title">Achievements</div>
                     <div class="container cc-education" id="cert-contents">
-                        <div class="h4 text-center mb-4 title">Achievements</div>
                     </div>
                 </div>
+                <a href="#" id="showMore" style="text-decoration: none; display: flex;justify-content: center;">Show More <i class="fa">︁</i></a>
                 <div class="section" id="contact">
                     <div class="cc-contact-information" style="background-image: url('images/map.jpg');">
                         <div class="container">
@@ -772,41 +773,10 @@
         }
         // Get Local Data from Local Storage
         var rows = GetLocalData()
+        console.log(rows)
         appendData(rows)
 
-        function appendData(rows) {
-            var finalContent = ""
-            rows.forEach((item) => {
-                var content = `
-                        <div class="card">
-                            <div class="row">
-                                <div class="col-md-3 bg-success" data-aos="fade-right" data-aos-offset="50"
-                                    data-aos-duration="500">
-                                    <div class="card-body cc-education-header">
-                                        <div class="h5">${item.Source}</div>
-                                        <p>Issued on ${item.IssuedOn}<br><em>(This certification does not expire)</em></p>
-                                    </div>
-                                </div>
-                                <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
-                                    <div class="card-body">
-                                        <div class="h5">${item.Title}</div>
-                                        <p class="category">${item.SubSource}</p>
-                                        <p>Credential Id: ${item.CredentialId}<br>
-                                            Grade Achieved: ${item.Grade}<br>
-                                            <a href="${item.CredentialURL}"
-                                                target="_blank">Go
-                                                to Credential</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                `
-                finalContent += content
-
-            })
-            $('#cert-contents').append(finalContent)
-        }
+        
     </script>
 
 </body>

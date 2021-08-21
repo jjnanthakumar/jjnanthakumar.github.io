@@ -44,7 +44,7 @@ $('a.smooth-scroll')
 
 function LoadExcelJSON(data) {
   var workbook = XLSX.read(data, { type: 'base64' });
-  var collections = { certifications: [] }
+  var collections = {}
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
@@ -60,10 +60,60 @@ function GetLocalData() {
   var stored = localStorage.getItem('collections');
   if (stored) local_collections = JSON.parse(stored);
   else local_collections = { 'certifications': [] };
-  return local_collections.certifications
+  return local_collections.certifications[0]
 }
 
 function ValidateLocalData(key) {
   var stored = localStorage.getItem('collections');
   return stored ? true : false
+}
+
+$(document).ready(function () {
+  $('#showMore').on('click', function (e) {
+    e.preventDefault();
+    window.pagination += 5;
+    if (window.pagination >= GetLocalData().length) {
+      window.pagination = 5
+    }
+    appendData(GetLocalData())
+  });
+});
+
+
+window.itemsCount = 0;
+function appendData(rows) {
+  var finalContent = ""
+  let pagination = 5;
+  for (let i = itemsCount; i < (itemsCount + pagination); i++) {
+    var item = rows[i];
+    var content = `
+              <div class="card" id="index${i}">
+                  <div class="row">
+                      <div class="col-md-3 bg-success" data-aos="fade-right" data-aos-offset="50"
+                          data-aos-duration="500">
+                          <div class="card-body cc-education-header">
+                              <div class="h5">${item.Source}</div>
+                              <p>Issued on ${item.IssuedOn}<br><em>(This certification does not expire)</em></p>
+                          </div>
+                      </div>
+                      <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
+                          <div class="card-body">
+                              <div class="h5">${item.Title}</div>
+                              <p class="category">${item.SubSource}</p>
+                              <p>Credential Id: ${item.CredentialId}<br>
+                                  Grade Achieved: ${item.Grade}<br>
+                                  <a href="${item.CredentialURL}"
+                                      target="_blank">Go
+                                      to Credential</a>
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      `
+    finalContent += content
+    
+  }
+  $('#cert-contents').append(finalContent)
+  window.itemsCount += pagination;
 }
