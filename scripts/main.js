@@ -44,7 +44,7 @@ $('a.smooth-scroll')
 
 function LoadExcelJSON(data) {
   var workbook = XLSX.read(data, { type: 'base64' });
-  var collections = {}
+  var collections = {certifications: []}
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
@@ -60,7 +60,7 @@ function GetLocalData() {
   var stored = localStorage.getItem('collections');
   if (stored) local_collections = JSON.parse(stored);
   else local_collections = { 'certifications': [] };
-  return local_collections.certifications[0]
+  return local_collections
 }
 
 function ValidateLocalData(key) {
@@ -69,9 +69,10 @@ function ValidateLocalData(key) {
 }
 
 $(document).ready(function () {
+  appendData(GetLocalData().certifications[0])
   $('#showMore').on('click', function (e) {
     e.preventDefault();
-    appendData(GetLocalData())
+    appendData(GetLocalData().certifications[0])
   });
 });
 
