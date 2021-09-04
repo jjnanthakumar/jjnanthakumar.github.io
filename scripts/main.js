@@ -1,6 +1,7 @@
 // Add your javascript here
 // Don't forget to add it into respective layouts where this js file is needed
 
+var conditionalColors = { 'PRESENT': 'blue', 'COMPLETED': 'green' }
 $(document).ready(function () {
   AOS.init({
     // uncomment below for on-scroll animations to played only once
@@ -44,14 +45,20 @@ $('a.smooth-scroll')
 
 function LoadExcelJSON(data) {
   var workbook = XLSX.read(data, { type: 'base64' });
-  var collections = { certifications: [] }
+  var collections = { certifications: [], experience: [] }
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
     var roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
     if (roa.length > 0) {
-      collections.certifications.push(roa);
+      if (y == 'Certifications') {
+        collections.certifications.push(roa);
+      }
+      else if (y == 'Experience') {
+        collections.experience.push(roa);
+      }
     }
+    console.log(collections)
   });
   localStorage.setItem('collections', JSON.stringify(collections))
 }
@@ -70,8 +77,10 @@ function ValidateLocalData(key) {
 
 $(document).ready(function () {
   loadDatafromAPI();
+  var localData = GetLocalData()
   if (ValidateLocalData()) {
-    appendData(GetLocalData().certifications[0])
+    appendData(localData.certifications[0])
+    appendExperienceDetails(localData.experience[0]);
   }
   $('#showMore').on('click', function (e) {
     e.preventDefault();
@@ -131,7 +140,7 @@ function loadDatafromAPI() {
         'Authorization': "token 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"
       },
       success: function (results) {
-        // LoadExcelJSON(results.data.content);
+        LoadExcelJSON(results.data.content);
         // appendData(GetLocalData().certifications[0])
       }
     });
@@ -140,5 +149,36 @@ function loadDatafromAPI() {
 
 
 function appendExperienceDetails(rows) {
+  var finalContent = ""
+  for (let i = 0; i < rows.length; i++) {
+    var item = rows[i];
+    var content = `
+      <div class="card">
+        <div class="row">
+          <div class="col-md-3 bg-warning" data-aos="fade-right" data-aos-offset="50"
+            data-aos-duration="500">
+            <div class="card-body cc-experience-header">
+              <p>${item.DateFrom} - ${item.DateTo} </p>
+              <div class="h5">${item.Company}</div>
+            </div>
+          </div>
+          <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
+            <div class="card-body">
+              <span style="float: right;"><button class="btn-tag"
+                style="border-color: ${conditionalColors[item.Status]}; background-color: ${conditionalColors[item.Status]};">${item.Status}</button></span>
+              <div class="h5">${item.Role}</div>
+              <p class="category">${item.Location}</p>
+              <p>${item.Description}</p>
+              <a href="${item.CredentialURL}" class="${!item.CredentialURL ? 'disabledlink' : ''}" target="_blank" onclick="return ${!item.CredentialURL ? false : true}">Go to
+                Credential</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+    finalContent += content
 
+  }
+  $('#exp-contents').append(finalContent)
 }
+
