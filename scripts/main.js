@@ -44,7 +44,7 @@ $('a.smooth-scroll')
 
 function LoadExcelJSON(data) {
   var workbook = XLSX.read(data, { type: 'base64' });
-  var collections = {certifications: []}
+  var collections = { certifications: [] }
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
@@ -69,7 +69,8 @@ function ValidateLocalData(key) {
 }
 
 $(document).ready(function () {
-  if(ValidateLocalData()){
+  loadDatafromAPI();
+  if (ValidateLocalData()) {
     appendData(GetLocalData().certifications[0])
   }
   $('#showMore').on('click', function (e) {
@@ -118,4 +119,26 @@ function appendData(rows) {
   if (window.itemsCount > rows.length) {
     $('#showMore').hide();
   }
+}
+function loadDatafromAPI() {
+  var file_url = "https://api.github.com/repos/jjnanthakumar/jjnanthakumar.github.io/contents/portfolios.xlsx"
+  if (!ValidateLocalData()) {
+    $.ajax({
+      url: file_url,
+      dataType: 'jsonp',
+      headers: {
+        'accept': 'application/vnd.github.VERSION.raw',
+        'Authorization': "token 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"
+      },
+      success: function (results) {
+        // LoadExcelJSON(results.data.content);
+        // appendData(GetLocalData().certifications[0])
+      }
+    });
+  }
+}
+
+
+function appendExperienceDetails(rows) {
+
 }
