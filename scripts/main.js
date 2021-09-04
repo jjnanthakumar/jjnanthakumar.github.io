@@ -141,7 +141,8 @@ function loadDatafromAPI() {
       },
       success: function (results) {
         LoadExcelJSON(results.data.content);
-        // appendData(GetLocalData().certifications[0])
+        appendData(GetLocalData().certifications[0])
+        appendExperienceDetails(GetLocalData().experience[0])
       }
     });
   }
