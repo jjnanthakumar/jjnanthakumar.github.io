@@ -183,3 +183,9 @@ function appendExperienceDetails(rows) {
   $('#exp-contents').append(finalContent)
 }
 
+function clearLocalCollection(){
+  if(ValidateLocalData()){
+    localStorage.removeItem('collections');
+  }
+  window.location.reload();
+}
