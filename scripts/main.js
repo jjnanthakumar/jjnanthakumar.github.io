@@ -45,7 +45,7 @@ $('a.smooth-scroll')
 
 function LoadExcelJSON(data) {
   let workbook = XLSX.read(data, { type: 'base64' });
-  let collections = { certifications: [], experience: [], skills: [] }
+  let collections = { certifications: [], experience: [], skills: [], projects: [] }
   let sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
@@ -59,6 +59,9 @@ function LoadExcelJSON(data) {
       }
       else if (y == 'Skills') {
         collections.skills.push(roa);
+      }
+      else if (y == 'Projects') {
+        collections.projects.push(roa);
       }
     }
     console.log(collections)
@@ -85,6 +88,7 @@ $(document).ready(function () {
     appendData(localData.certifications[0])
     appendExperienceDetails(localData.experience[0]);
     appendSkills(localData.skills[0])
+    appendProjects(localData.projects[0]);
   }
   $('#showMore').on('click', function (e) {
     e.preventDefault();
@@ -209,7 +213,32 @@ function appendSkills(rows) {
     finalContent += content
   }
   $('#skill-contents').append(finalContent)
+}
 
+function appendProjects(rows) {
+  let finalContent = ""
+  for (let i = 0; i < rows.length; i++) {
+    item = rows[i]
+    content =
+      `
+      <div class="col-md-6">
+        <div class="cc-porfolio-image img-raised" data-aos="fade-up"
+          data-aos-anchor-placement="top-bottom"><a
+            href=${item.ProjectURL} target="_blank">
+            <figure class="cc-effect"><img height="360" src=${item.CoverImage}
+              alt="Image" />
+              <figcaption>
+                <div class="h4">${item.Title}</div>
+                <p>${item.Category}</p>
+              </figcaption>
+            </figure>
+          </a>
+        </div>
+      </div>
+    `
+    finalContent += content
+    $('#project-contents').append(finalContent)
+  }
 }
 
 function clearLocalCollection() {
