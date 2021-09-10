@@ -237,8 +237,9 @@ function appendProjects(rows) {
       </div>
     `
     finalContent += content
-    $('#project-contents').append(finalContent)
   }
+  $('#project-contents').append(finalContent)
+
 }
 
 function clearLocalCollection() {
