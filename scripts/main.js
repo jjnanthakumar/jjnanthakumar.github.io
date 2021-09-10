@@ -76,20 +76,19 @@ function GetLocalData() {
   return local_collections
 }
 
-function ValidateLocalData(key) {
+function ValidateLocalData() {
   let stored = localStorage.getItem('collections');
+  console.log(stored ? true : false)
   return stored ? true : false
 }
 
 $(document).ready(function () {
   loadDatafromAPI();
   let localData = GetLocalData()
-  if (ValidateLocalData()) {
-    appendData(localData.certifications[0])
-    appendExperienceDetails(localData.experience[0]);
-    appendSkills(localData.skills[0])
-    appendProjects(localData.projects[0]);
-  }
+  appendData(localData.certifications[0])
+  appendExperienceDetails(localData.experience[0]);
+  appendSkills(localData.skills[0])
+  appendProjects(localData.projects[0]);
   $('#showMore').on('click', function (e) {
     e.preventDefault();
     appendData(GetLocalData().certifications[0])
@@ -149,8 +148,11 @@ function loadDatafromAPI() {
       },
       success: function (results) {
         LoadExcelJSON(results.data.content);
-        appendData(GetLocalData().certifications[0])
-        appendExperienceDetails(GetLocalData().experience[0])
+        let localData = GetLocalData()
+        appendData(localData.certifications[0])
+        appendExperienceDetails(localData.experience[0])
+        appendSkills(localData.skills[0])
+        appendProjects(localData.projects[0])
       }
     });
   }
