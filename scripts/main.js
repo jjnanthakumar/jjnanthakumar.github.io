@@ -45,7 +45,7 @@ $('a.smooth-scroll')
 
 function LoadExcelJSON(data) {
   var workbook = XLSX.read(data, { type: 'base64' });
-  var collections = { certifications: [], experience: [] }
+  var collections = { certifications: [], experience: [], skills: [] }
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
@@ -56,6 +56,9 @@ function LoadExcelJSON(data) {
       }
       else if (y == 'Experience') {
         collections.experience.push(roa);
+      }
+      else if (y == 'Skills') {
+        collections.skills.push(roa);
       }
     }
     console.log(collections)
