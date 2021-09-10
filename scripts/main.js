@@ -19,7 +19,7 @@ $('a.smooth-scroll')
       location.hostname == this.hostname
     ) {
       // Figure out element to scroll to
-      var target = $(this.hash);
+      let target = $(this.hash);
       target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
       // Does a scroll target exist?
       if (target.length) {
@@ -30,7 +30,7 @@ $('a.smooth-scroll')
         }, 1000, function () {
           // Callback after animation
           // Must change focus!
-          var $target = $(target);
+          let $target = $(target);
           $target.focus();
           if ($target.is(":focus")) { // Checking if the target was focused
             return false;
@@ -44,12 +44,12 @@ $('a.smooth-scroll')
   });
 
 function LoadExcelJSON(data) {
-  var workbook = XLSX.read(data, { type: 'base64' });
-  var collections = { certifications: [], experience: [], skills: [] }
-  var sheet_name_list = workbook.SheetNames;
+  let workbook = XLSX.read(data, { type: 'base64' });
+  let collections = { certifications: [], experience: [], skills: [] }
+  let sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function (y) { /* iterate through sheets */
     //Convert the cell value to Json
-    var roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+    let roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
     if (roa.length > 0) {
       if (y == 'Certifications') {
         collections.certifications.push(roa);
@@ -67,23 +67,24 @@ function LoadExcelJSON(data) {
 }
 
 function GetLocalData() {
-  var stored = localStorage.getItem('collections');
+  let stored = localStorage.getItem('collections');
   if (stored) local_collections = JSON.parse(stored);
-  else local_collections = { 'certifications': [] };
+  else local_collections = { certifications: [], experience: [], skills: [] };
   return local_collections
 }
 
 function ValidateLocalData(key) {
-  var stored = localStorage.getItem('collections');
+  let stored = localStorage.getItem('collections');
   return stored ? true : false
 }
 
 $(document).ready(function () {
   loadDatafromAPI();
-  var localData = GetLocalData()
+  let localData = GetLocalData()
   if (ValidateLocalData()) {
     appendData(localData.certifications[0])
     appendExperienceDetails(localData.experience[0]);
+    appendSkills(localData.skills[0])
   }
   $('#showMore').on('click', function (e) {
     e.preventDefault();
@@ -94,11 +95,11 @@ $(document).ready(function () {
 
 window.itemsCount = 0;
 function appendData(rows) {
-  var finalContent = ""
+  let finalContent = ""
   let pagination = 5;
   for (let i = window.itemsCount; i < (window.itemsCount + pagination); i++) {
-    var item = rows[i];
-    var content = `
+    let item = rows[i];
+    let content = `
               <div class="card" id="index${i}">
                   <div class="row">
                       <div class="col-md-3 bg-success" data-aos="fade-right" data-aos-offset="50"
@@ -133,7 +134,7 @@ function appendData(rows) {
   }
 }
 function loadDatafromAPI() {
-  var file_url = "https://api.github.com/repos/jjnanthakumar/jjnanthakumar.github.io/contents/portfolios.xlsx"
+  let file_url = "https://api.github.com/repos/jjnanthakumar/jjnanthakumar.github.io/contents/portfolios.xlsx"
   if (!ValidateLocalData()) {
     $.ajax({
       url: file_url,
@@ -153,10 +154,10 @@ function loadDatafromAPI() {
 
 
 function appendExperienceDetails(rows) {
-  var finalContent = ""
+  let finalContent = ""
   for (let i = 0; i < rows.length; i++) {
-    var item = rows[i];
-    var content = `
+    let item = rows[i];
+    let content = `
       <div class="card">
         <div class="row">
           <div class="col-md-3 bg-warning" data-aos="fade-right" data-aos-offset="50"
@@ -186,8 +187,33 @@ function appendExperienceDetails(rows) {
   $('#exp-contents').append(finalContent)
 }
 
-function clearLocalCollection(){
-  if(ValidateLocalData()){
+function appendSkills(rows) {
+  let finalContent = ""
+  for (let i = 0; i < rows.length; i++) {
+    let item = rows[i];
+    content =
+      `
+      <div class="col-md-6">
+        <div class="progress-container progress-primary"><span
+          class="progress-badge">${item.Category}</span>
+          <div class="progress">
+            <div class="progress-bar progress-bar-primary" data-aos="progress-full"
+              data-aos-offset="10" data-aos-duration="2000" role="progressbar"
+              aria-valuenow=${item.Percent} aria-valuemin="0" aria-valuemax="100"
+              style="width: ${item.Percent};"></div>
+            <span class="progress-value">${item.Percent}</span>
+          </div>
+        </div>
+      </div>
+    `
+    finalContent += content
+  }
+  $('#skill-contents').append(finalContent)
+
+}
+
+function clearLocalCollection() {
+  if (ValidateLocalData()) {
     localStorage.removeItem('collections');
   }
   window.location.reload();
