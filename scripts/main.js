@@ -89,13 +89,18 @@ $(document).ready(function () {
   });
 });
 
-
-window.itemsCount = 0;
+window.globals = {
+  page: 1,
+  step: 5,
+  start: 0,
+  end: 5
+}
 function appendData(rows) {
+
+  let data = rows.splice(window.globals.start, window.globals.end)
   let finalContent = ""
-  let pagination = 5;
-  for (let i = window.itemsCount; i < (window.itemsCount + pagination); i++) {
-    let item = rows[i];
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
     let content = `
               <div class="card" id="index${i}">
                   <div class="row">
@@ -125,10 +130,9 @@ function appendData(rows) {
 
   }
   $('#cert-contents').append(finalContent)
-  window.itemsCount += pagination;
-  if (window.itemsCount > rows.length) {
-    $('#showMore').hide();
-  }
+  window.globals.start += window.globals.step
+  if (rows.length % window.globals.step == 0) $('#showMore').hide();
+
 }
 function loadDatafromAPI() {
   let file_url = "https://api.github.com/repos/jjnanthakumar/jjnanthakumar.github.io/contents/portfolios.xlsx"
