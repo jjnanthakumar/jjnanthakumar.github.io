@@ -64,7 +64,6 @@ function LoadExcelJSON(data) {
         collections.projects.push(roa);
       }
     }
-    console.log(collections)
   });
   localStorage.setItem('collections', JSON.stringify(collections))
 }
@@ -84,11 +83,6 @@ function ValidateLocalData() {
 
 $(document).ready(function () {
   loadDatafromAPI();
-  let localData = GetLocalData()
-  appendData(localData.certifications[0])
-  appendExperienceDetails(localData.experience[0]);
-  appendSkills(localData.skills[0])
-  appendProjects(localData.projects[0]);
   $('#showMore').on('click', function (e) {
     e.preventDefault();
     appendData(GetLocalData().certifications[0])
@@ -148,14 +142,14 @@ function loadDatafromAPI() {
       },
       success: function (results) {
         LoadExcelJSON(results.data.content);
-        let localData = GetLocalData()
-        appendData(localData.certifications[0])
-        appendExperienceDetails(localData.experience[0])
-        appendSkills(localData.skills[0])
-        appendProjects(localData.projects[0])
       }
     });
   }
+  let localData = GetLocalData()
+  appendData(localData.certifications[0])
+  appendExperienceDetails(localData.experience[0]);
+  appendSkills(localData.skills[0])
+  appendProjects(localData.projects[0]);
 }
 
 
