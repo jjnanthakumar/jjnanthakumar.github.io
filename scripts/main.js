@@ -77,12 +77,19 @@ function GetLocalData() {
 
 function ValidateLocalData() {
   let stored = localStorage.getItem('collections');
-  console.log(stored ? true : false)
   return stored ? true : false
 }
 
 $(document).ready(function () {
   loadDatafromAPI();
+  setTimeout(() => {
+    let localData = GetLocalData()
+    appendData(localData.certifications[0])
+    appendExperienceDetails(localData.experience[0]);
+    appendSkills(localData.skills[0])
+    appendProjects(localData.projects[0]);
+  }, 500)
+
   $('#showMore').on('click', function (e) {
     e.preventDefault();
     appendData(GetLocalData().certifications[0])
@@ -149,11 +156,7 @@ function loadDatafromAPI() {
       }
     });
   }
-  let localData = GetLocalData()
-  appendData(localData.certifications[0])
-  appendExperienceDetails(localData.experience[0]);
-  appendSkills(localData.skills[0])
-  appendProjects(localData.projects[0]);
+
 }
 
 
