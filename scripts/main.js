@@ -125,7 +125,7 @@ function appendData(rows) {
                               <p>Credential Id: ${item.CredentialId}<br>
                                   Grade Achieved: ${item.Grade}<br>
                                   <a href="${item.CredentialURL}"
-                                      target="_blank">Go
+                                      target="_blank" rel="noreferrer">Go
                                       to Credential</a>
                               </p>
                           </div>
@@ -181,7 +181,7 @@ function appendExperienceDetails(rows) {
               <div class="h5">${item.Role}</div>
               <p class="category">${item.Location}</p>
               <p>${item.Description}</p>
-              <a href="${item.CredentialURL}" class="${!item.CredentialURL ? 'disabledlink' : ''}" target="_blank" onclick="return ${!item.CredentialURL ? false : true}">Go to
+              <a href="${item.CredentialURL}" class="${!item.CredentialURL ? 'disabledlink' : ''}" target="_blank" rel="noreferrer" onclick="return ${!item.CredentialURL ? false : true}">Go to
                 Credential</a>
             </div>
           </div>
@@ -205,6 +205,7 @@ function appendSkills(rows) {
           class="progress-badge">${item.Category}</span>
           <div class="progress">
             <div class="progress-bar progress-bar-primary" data-aos="progress-full"
+              aria-progressbar-name="progressbar"
               data-aos-offset="10" data-aos-duration="2000" role="progressbar"
               aria-valuenow=${item.Percent} aria-valuemin="0" aria-valuemax="100"
               style="width: ${item.Percent};"></div>
@@ -224,11 +225,11 @@ function appendProjects(rows) {
     item = rows[i]
     content =
       `
-      <div class="col-md-6">
+      < div class="col-md-6" >
         <div class="cc-porfolio-image img-raised" data-aos="fade-up"
           data-aos-anchor-placement="top-bottom"><a
-            href=${item.ProjectURL} target="_blank">
-            <figure class="cc-effect"><img height="360" src=${item.CoverImage}
+            href=${item.ProjectURL} target="_blank" rel="noreferrer">
+            <figure class="cc-effect"><img height="360" width="480" data-src=${item.CoverImage} class="lazyload"
               alt="Image" />
               <figcaption>
                 <div class="h4">${item.Title}</div>
@@ -237,8 +238,8 @@ function appendProjects(rows) {
             </figure>
           </a>
         </div>
-      </div>
-    `
+      </div >
+      `
     finalContent += content
   }
   $('#project-contents').append(finalContent)
