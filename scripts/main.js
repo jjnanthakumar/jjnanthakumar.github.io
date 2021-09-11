@@ -227,7 +227,7 @@ function appendProjects(rows) {
       `<div class="col-md-6" >
         <div class="cc-porfolio-image img-raised" data-aos="fade-up"
           data-aos-anchor-placement="top-bottom"><a href=${item.ProjectURL} target="_blank" rel="noreferrer">
-            <figure class="cc-effect"><img height="360" width="auto" data-src=${item.CoverImage} class="lazyload" alt="Image" />
+            <figure class="cc-effect"><img height="360" width="680" data-src=${item.CoverImage} class="lazyload" alt="Image" />
               <figcaption>
                 <div class="h4">${item.Title}</div>
                 <p>${item.Category}</p>
