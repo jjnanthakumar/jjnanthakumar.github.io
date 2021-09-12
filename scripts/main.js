@@ -88,7 +88,7 @@ $(document).ready(function () {
     appendExperienceDetails(localData.experience[0]);
     appendSkills(localData.skills[0])
     appendProjects(localData.projects[0]);
-  }, 500)
+  }, 1000)
 
   $('#showMore').on('click', function (e) {
     e.preventDefault();
