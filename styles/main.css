@@ -6659,12 +6659,12 @@ a.credit {
 
 .btn-tag {
   outline: 0 !important;
-  background: #10AC84;
+  background: green;
   color: #fff;
   font-size: 14px;
   text-transform: uppercase;
   width: 100%;
-  border: 2.5px solid #10AC84;
+  border: 2.5px solid green;
   border-radius: 25px;
   cursor: not-allowed;
   transition: 0.5s;
