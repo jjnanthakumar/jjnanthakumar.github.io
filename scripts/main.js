@@ -81,6 +81,17 @@ function ValidateLocalData() {
 }
 
 $(document).ready(function () {
+  const USER_ID = "user_pXXWo8nEe8W3NAwRLeNhI"
+  const SERVICE_ID = "contactform_service"
+  var templateParams = {
+    from_name: "",
+    to_name: "",
+    mobile: "",
+    email: "",
+    company: "",
+    message: ""
+  }
+  emailjs.init(USER_ID);
   loadDatafromAPI();
   setTimeout(() => {
     let localData = GetLocalData()
@@ -94,8 +105,50 @@ $(document).ready(function () {
     e.preventDefault();
     appendData(GetLocalData().certifications[0])
   });
+
+  $('#send').on('click submit', e => {
+    $('#reload').css("display", "inline-block")
+    if (e.target.attributes["data-another"].value == "true") {
+      $('#modalheader').show()
+      $('#modalbody').show()
+      $('#content').hide()
+      $('#send').attr('data-another', false)
+      $('#send').html('Send')
+      return false
+    }
+    if (validateForm()) {
+      $('input').attr("disabled", "disabled")
+      $('#message').attr("disabled", "disabled")
+      templateParams.from_name = $('#name').val()
+      templateParams.to_name = "Nanthakumar J J"
+      templateParams.email = $('#email').val()
+      templateParams.company = $('#company').val().length > 0 ? $('#company').val() : "No Company Provided"
+      templateParams.mobile = $('#mobile').val()
+      templateParams.message = $('#message').val()
+      emailjs.send(SERVICE_ID, "contactform", templateParams)
+        .then(function (response) {
+          // console.log('SUCCESS!', response.status, response.text);
+          $('#modalheader').hide();
+          $('#modalbody').hide();
+          $('#content').html("Thank you for contacting Nanthakumar J J. We have recieved your request and our team will get back to you ASAP.")
+          $('#content').show()
+          $('#send').html('Send Another Response')
+          $('#send').attr('data-another', true)
+          $('input').removeAttr("disabled")
+          $('#message').removeAttr("disabled")
+          $('#reload').hide()
+        }, function (error) {
+          console.log('FAILED...', error);
+        });;
+    }
+    return validateForm()
+  });
 });
 
+function validateForm() {
+  // Get all form details and send mail
+  return true
+}
 window.globals = {
   page: 1,
   step: 5,
