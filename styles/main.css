@@ -3354,7 +3354,6 @@ Created using IcoMoon - icomoon.io
 
 -------------------------------- */
 
-
 /*------------------------
 	base class definition
 -------------------------*/
@@ -5679,7 +5678,7 @@ Created using IcoMoon - icomoon.io
 }
 
 @media only screen and (max-width: 768px) {
-  .stick{
+  .stick {
     left: 88% !important;
   }
 }
@@ -6680,4 +6679,12 @@ a.credit {
   padding: 7px;
   background-color: blue;
   color: white !important;
+}
+
+textarea::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+input::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.3) !important;
 }

@@ -1,6 +1,151 @@
 // Add your javascript here
 // Don't forget to add it into respective layouts where this js file is needed
 
+// Testing Contact form this can be removed if any page crashed.
+var flags = { email: false, phone: false, name: false, message: false }
+function generateError(inputObj) {
+  let element;
+  if (!document.getElementById(inputObj.id + 'error')) {
+    element = document.createElement('small')
+    element.setAttribute('id', inputObj.id + 'error')
+    element.setAttribute('class', 'errors')
+  }
+  else {
+    element = document.getElementById(inputObj.id + 'error')
+  }
+  element.style.color = "red";
+  element.style.fontSize = "12px"
+  element.style.display = "inline"
+  switch (inputObj.getAttribute('id')) {
+    case 'phone':
+      if (isEmpty(inputObj.value)) {
+        element.innerText = "Mobile Number Field should not be empty"
+        inputObj.style.border = "1px solid red";
+        flags.phone = false
+      }
+      else if (!isMobileValid(inputObj.value)) {
+        element.innerText = "Make sure the number is in (###)########### format"
+        inputObj.style.border = "1px solid red";
+        flags.phone = false
+      }
+      else {
+        flags.phone = true
+      }
+
+      if (!flags.phone) insertAfter(inputObj, element)
+
+      break;
+
+    case 'name':
+      if (isEmpty(inputObj.value)) {
+        element.innerText = "Name Field should not be empty"
+        inputObj.style.border = "1px solid red";
+        flags.name = false
+      }
+      else if (!isNameValid(inputObj.value)) {
+        element.innerText = "Please provide a valid name"
+        inputObj.style.border = "1px solid red";
+        flags.name = false
+      }
+      else {
+        flags.name = true
+      }
+      if (!flags.name) insertAfter(inputObj, element)
+      break;
+
+    case 'email':
+      if (isEmpty(inputObj.value)) {
+        element.innerText = "Email Field should not be empty"
+        inputObj.style.border = "1px solid red";
+        flags.email = false
+      }
+      else if (!isEmailValid(inputObj.value)) {
+        element.innerText = "Please provide a valid Email Id"
+        inputObj.style.border = "1px solid red";
+        flags.email = false
+      }
+      else {
+        flags.email = true
+      }
+      if (!flags.email) insertAfter(inputObj, element)
+      break;
+    case 'company':
+      if (isEmpty(inputObj.value)) {
+      }
+      break;
+    case 'message':
+      if (isEmpty(inputObj.value)) {
+        element.innerText = "Message Field should not be empty"
+        inputObj.style.border = "1px solid red";
+        flags.message = false
+      }
+      else {
+        flags.message = true
+      }
+      if (!flags.message) insertAfter(inputObj, element)
+      break;
+    default:
+      break;
+  }
+}
+
+function insertAfter(referenceNode, newNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
+function clearErrors(elements) {
+  jQuery('.errors').remove() // Remove Error elements
+}
+
+function isEmpty(val) {
+  // To check if the input field is empty or not
+  return val.length == 0
+}
+
+function isMobileValid(val) {
+  // This function validates for Mobile Number
+  let pattern = /^\([0-9]{1,3}\)\d{4,12}$/g
+  return pattern.test(val)
+}
+
+function isEmailValid(val) {
+  // This function validates Email
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(val).toLowerCase());
+}
+
+function isNameValid(val) {
+  // This function is to validate name using Regex
+  let pattern = /^[a-zA-Z \.]{3,}$/g
+  return pattern.test(val)
+}
+
+jQuery(document).ready(function ($) {
+
+  $('button[name="cf-submit"]').click((e) => {
+    var elements = document.getElementsByClassName('input')
+    clearErrors(elements); // Clear All Error Elements
+    for (let i = 0; i < elements.length; i++) {
+      generateError(elements[i]); // Generate Error Messages
+    }
+
+    if (Object.values(flags).every(e => e)) {
+      $('#cform').submit();
+    }
+    // This is to fade out Error Messages
+    setTimeout(() => {
+      $('.errors').fadeOut(2000)
+    }, 5000)
+    return Object.values(flags).every(e => e)
+
+  });
+});
+
+function reload() {
+  window.location.reload(true);
+}
+
+
 var conditionalColors = { 'PRESENT': 'blue', 'COMPLETED': 'green' }
 $(document).ready(function () {
   AOS.init({
@@ -8,6 +153,10 @@ $(document).ready(function () {
     // once: true  
   }); // initialize animate on scroll library
 });
+
+
+
+
 
 // Smooth scroll for links with hashes
 $('a.smooth-scroll')
@@ -81,6 +230,17 @@ function ValidateLocalData() {
 }
 
 $(document).ready(function () {
+  const USER_ID = "user_pXXWo8nEe8W3NAwRLeNhI"
+  const SERVICE_ID = "contactform_service"
+  var templateParams = {
+    from_name: "",
+    to_name: "",
+    mobile: "",
+    email: "",
+    company: "",
+    message: ""
+  }
+  emailjs.init(USER_ID);
   loadDatafromAPI();
   setTimeout(() => {
     let localData = GetLocalData()
@@ -94,7 +254,51 @@ $(document).ready(function () {
     e.preventDefault();
     appendData(GetLocalData().certifications[0])
   });
+
+  $('#cform').on('submit', e => {
+    e.preventDefault();
+    $('#reload').css("display", "inline-block")
+    if ($('#send').attr("data-another") == "true") {
+      showNewForm()
+    }
+    $('input').attr("disabled", "disabled")
+    $('#message').attr("disabled", "disabled")
+    templateParams.from_name = $('#name').val()
+    templateParams.to_name = "Nanthakumar J J"
+    templateParams.email = $('#email').val()
+    templateParams.company = $('#company').val().length > 0 ? $('#company').val() : "No Company Provided"
+    templateParams.mobile = $('#phone').val()
+    templateParams.message = $('#message').val()
+    emailjs.send(SERVICE_ID, "contactform", templateParams)
+      .then(function (response) {
+        // console.log('SUCCESS!', response.status, response.text);
+        afterFormSubmit()
+      }, function (error) {
+        console.log('FAILED...', error);
+      });;
+  });
 });
+
+function showNewForm() {
+  $("#cform")[0].reset();
+  $('#modalheader').show()
+  $('#modalbody').show()
+  $('#content').hide()
+  $('#send').attr('data-another', false)
+  $('#send').html('Send')
+  return false
+}
+function afterFormSubmit() {
+  $('#modalheader').hide();
+  $('#modalbody').hide();
+  $('#content').html("Thank you for contacting Nanthakumar J J. We have recieved your request and our team will get back to you ASAP.")
+  $('#content').show()
+  $('#send').html('Send Another Response')
+  $('#send').attr('data-another', true)
+  $('input').removeAttr("disabled")
+  $('#message').removeAttr("disabled")
+  $('#reload').hide()
+}
 
 window.globals = {
   page: 1,
