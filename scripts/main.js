@@ -260,6 +260,7 @@ $(document).ready(function () {
     $('#reload').css("display", "inline-block")
     if ($('#send').attr("data-another") == "true") {
       showNewForm()
+      return false
     }
     $('input').attr("disabled", "disabled")
     $('#message').attr("disabled", "disabled")
@@ -286,7 +287,6 @@ function showNewForm() {
   $('#content').hide()
   $('#send').attr('data-another', false)
   $('#send').html('Send')
-  return false
 }
 function afterFormSubmit() {
   $('#modalheader').hide();
