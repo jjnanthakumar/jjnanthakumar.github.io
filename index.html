@@ -378,28 +378,28 @@
                     </button>
                 </div>
                 <div class="modal-body" id="modalbody">
-                    <form style="font-size: 20px;">
+                    <form style="font-size: 20px;" id="cform">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="name" placeholder="Your Name">
+                            <input type="text" class="form-control input" id="name" placeholder="Your Name">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="email" placeholder="Your Mail Id">
+                            <input type="text" class="form-control input" id="email" placeholder="Your Mail Id">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="mobile" placeholder="Your Number">
+                            <input type="text" class="form-control input" id="phone" placeholder="Your Number">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="company" placeholder="Your Company/Startup">
+                            <input type="text" class="form-control input" id="company" placeholder="Your Company/Startup">
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" id="message" placeholder="Your Message please"></textarea>
+                            <textarea class="form-control input" id="message" placeholder="Your Message please"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-body" id="content" style="display: none;"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" id="send" data-another='false' class="btn btn-primary">Send<i id="reload"
+                    <button name="cf-submit" type="submit" id="send" data-another='false' class="btn btn-primary">Send<i id="reload"
                             style="display: none;" class="fa fa-spinner fa-spin"></i></button>
                 </div>
             </div>
@@ -422,8 +422,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js" async></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
     <!-- Dev -->
-    <script src="scripts/main.js"></script>
-    <!-- <script src="scripts/main.min.js"></script> -->
+    <!-- <script src="scripts/main.js"></script> -->
+    <script src="scripts/main.min.js"></script>
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js" async></script>
     <script src="js/lazysizes.min.js" async></script>
     <script src="https://use.fontawesome.com/907b75cc93.js" async></script>
