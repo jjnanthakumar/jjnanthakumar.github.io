@@ -307,7 +307,6 @@ window.globals = {
   end: 5
 }
 function appendData(rows) {
-
   let data = rows.splice(window.globals.start, window.globals.end)
   let finalContent = ""
   for (let i = 0; i < data.length; i++) {
@@ -353,6 +352,7 @@ function loadDatafromAPI() {
       dataType: 'jsonp',
       headers: {
         'accept': 'application/vnd.github.VERSION.raw',
+        // 'User-Agent': 'jjnanthakumar'
         'Authorization': "token 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"
       },
       success: function (results) {
