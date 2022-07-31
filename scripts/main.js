@@ -346,13 +346,15 @@ function appendData(rows) {
 }
 function loadDatafromAPI() {
   let file_url = "https://api.github.com/repos/jjnanthakumar/jjnanthakumar.github.io/contents/portfolios.xlsx"
+  // if (ValidateLocalData()) {
+  //   localStorage.removeItem('collections');
+  // }
   if (!ValidateLocalData()) {
     $.ajax({
       url: file_url,
       dataType: 'jsonp',
       headers: {
         'accept': 'application/vnd.github.VERSION.raw',
-        // 'User-Agent': 'jjnanthakumar'
         'Authorization': "token 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"
       },
       success: function (results) {
