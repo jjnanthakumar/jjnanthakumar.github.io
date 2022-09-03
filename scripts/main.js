@@ -122,6 +122,12 @@ function isNameValid(val) {
 
 jQuery(document).ready(function ($) {
 
+  const dob = new Date("02/17/2000")
+  var month_diff = Date.now() - dob.getTime();
+
+  var year = (new Date(month_diff)).getFullYear();
+  var age = Math.abs(year - 1970);
+  $('#age').html(age)
   $('button[name="cf-submit"]').click((e) => {
     var elements = document.getElementsByClassName('input')
     clearErrors(elements); // Clear All Error Elements
