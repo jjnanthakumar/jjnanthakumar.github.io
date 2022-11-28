@@ -221,6 +221,7 @@ function LoadExcelJSON(data) {
     }
   });
   localStorage.setItem('collections', JSON.stringify(collections))
+  return collections
 }
 
 function GetLocalData() {
@@ -248,13 +249,6 @@ $(document).ready(function () {
   }
   emailjs.init(USER_ID);
   loadDatafromAPI();
-  setTimeout(() => {
-    let localData = GetLocalData()
-    appendData(localData.certifications[0])
-    appendExperienceDetails(localData.experience[0]);
-    appendSkills(localData.skills[0])
-    appendProjects(localData.projects[0]);
-  }, 1000)
 
   $('#showMore').on('click', function (e) {
     e.preventDefault();
@@ -364,9 +358,21 @@ function loadDatafromAPI() {
         'Authorization': "token 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"
       },
       success: function (results) {
-        LoadExcelJSON(results.data.content);
+        let localData = LoadExcelJSON(results.data.content);
+        appendData(localData.certifications[0])
+        appendExperienceDetails(localData.experience[0]);
+        appendSkills(localData.skills[0])
+        appendProjects(localData.projects[0]);
       }
     });
+  }
+  else {
+    // load from local
+    let localData = GetLocalData();
+    appendData(localData.certifications[0])
+    appendExperienceDetails(localData.experience[0]);
+    appendSkills(localData.skills[0])
+    appendProjects(localData.projects[0]);
   }
 
 }
