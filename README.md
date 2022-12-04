@@ -3,4 +3,4 @@ This portfolio showcases [Nanthakumar J J](https://jjnanthakumar.github.io) achi
 
 Credit: Unknown for base template.
 
-Copyright &copy 2022 Nanthakumar J J
+Copyright &copy; 2022 Nanthakumar J J
