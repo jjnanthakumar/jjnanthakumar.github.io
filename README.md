@@ -1,2 +1,6 @@
 # jjnanthakumar.github.io
-This is my port folio and got template from some other sites and I have added more features and modified by [Nanthakumar J J](https://jjnanthakumar.github.io)
+This portfolio showcases [Nanthakumar J J](https://jjnanthakumar.github.io) achievements & certifications.
+
+Credit: Unknown for base template.
+
+Copyright &copy 2022 Nanthakumar J J
