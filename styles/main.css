@@ -6709,3 +6709,9 @@ input::-webkit-input-placeholder {
   outline: 0 !important;
   border-radius: 10px !important;
 }
+
+#showMore{
+  display: flex !important;
+  text-decoration: none;
+  justify-content: center;
+}
