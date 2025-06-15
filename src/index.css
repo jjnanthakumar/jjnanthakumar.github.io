@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: 240 33% 98%; /* Light bluish-purple background */
+		--foreground: 250 47% 11%; /* Dark purple text for light mode */
+
+		--card: 240 33% 98%;
+		--card-foreground: 250 47% 11%;
+
+		--popover: 240 33% 98%;
+		--popover-foreground: 250 47% 11%;
+
+		--primary: 250 84% 54%; /* #4f46e5 - indigo/purple */
+		--primary-foreground: 0 0% 100%;
+
+		--secondary: 262 83% 58%; /* #7c3aed - violet */
+		--secondary-foreground: 0 0% 100%;
+
+		--muted: 250 40% 96.1%;
+		--muted-foreground: 250 16.3% 46.9%;
+
+		--accent: 268 75% 60%; /* #8b5cf6 - purple */
+		--accent-foreground: 0 0% 100%;
+
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+
+		--border: 250 31.8% 91.4%;
+		--input: 250 31.8% 91.4%;
+		--ring: 250 84% 54%; /* Match primary */
+
+		--radius: 0.5rem;
+
+		--font-sans:
+			"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+			Arial, sans-serif;
+		--font-display:
+			"SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+			"Helvetica Neue", Arial, sans-serif;
+
+		/* Add new semantic color variables */
+		--success: 142 71% 45%;
+		--success-foreground: 0 0% 100%;
+		--info: 214 84% 56%;
+		--info-foreground: 0 0% 100%;
+		--warning: 38 92% 50%;
+		--warning-foreground: 0 0% 100%;
+
+		/* Add new interaction states */
+		--hover-overlay: 240 33% 96%;
+		--active-overlay: 240 33% 94%;
+		--disabled-opacity: 0.6;
+
+		/* Add animation variables */
+		--transition-fast: 150ms;
+		--transition-normal: 250ms;
+		--transition-slow: 350ms;
+	}
+
+	.dark {
+		--background: 240 25% 8%; /* #0f0e1a - dark blue/purple */
+		--foreground: 240 40% 98%;
+
+		--card: 240 25% 8%;
+		--card-foreground: 240 40% 98%;
+
+		--popover: 240 25% 8%;
+		--popover-foreground: 240 40% 98%;
+
+		--primary: 250 84% 54%; /* #4f46e5 - indigo/purple */
+		--primary-foreground: 0 0% 100%;
+
+		--secondary: 262 83% 58%; /* #7c3aed - violet */
+		--secondary-foreground: 0 0% 100%;
+
+		--muted: 250 32.6% 17.5%;
+		--muted-foreground: 250 20.2% 65.1%;
+
+		--accent: 268 75% 60%; /* #8b5cf6 - purple */
+		--accent-foreground: 0 0% 100%;
+
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 0 0% 98%;
+
+		--border: 250 32.6% 17.5%;
+		--input: 250 32.6% 17.5%;
+		--ring: 250 84% 54%; /* Match primary */
+	}
+
+	* {
+		@apply border-border;
+	}
+
+	body {
+		@apply bg-background text-foreground font-sans antialiased transition-colors duration-300;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-display tracking-tight;
+	}
+
+	.theme-transition {
+		@apply transition-colors duration-300;
+	}
+
+	::-webkit-scrollbar {
+		@apply w-2;
+	}
+
+	::-webkit-scrollbar-track {
+		@apply bg-transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		@apply bg-muted rounded-full;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		@apply bg-muted-foreground/40;
+	}
+
+	::selection {
+		@apply bg-primary/20 text-primary;
+	}
+
+	.text-balance {
+		text-wrap: balance;
+	}
+
+	/* Card and Button Hover Effects */
+	.card-hover {
+		@apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+	}
+
+	.button-hover {
+		@apply transition-all duration-300 hover:shadow-md;
+	}
+
+	.link-hover {
+		@apply relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full;
+	}
+
+	/* Page Transition Animations */
+	.page-transition-out {
+		animation: fade-out 0.3s ease forwards;
+	}
+
+	.page-transition-in {
+		animation: fade-in 0.5s ease forwards;
+	}
+
+	.prose {
+		@apply max-w-none;
+	}
+
+	/* Better styling for markdown/content */
+	.prose h2 {
+		@apply text-2xl font-bold mt-8 mb-4 text-foreground/90 border-b pb-2 border-border/60;
+	}
+
+	.prose h3 {
+		@apply text-xl font-semibold mt-6 mb-3 text-foreground/80;
+	}
+
+	.prose p {
+		@apply my-4 leading-relaxed text-foreground/80;
+	}
+
+	.prose ul {
+		@apply my-4 list-disc pl-6 space-y-2;
+	}
+
+	.prose ol {
+		@apply my-4 list-decimal pl-6 space-y-2;
+	}
+
+	.prose a {
+		@apply text-primary hover:text-primary/80 underline underline-offset-2 transition-colors;
+	}
+
+	.prose blockquote {
+		@apply border-l-4 border-primary/20 pl-4 py-1 my-4 text-foreground/70 italic;
+	}
+
+	.prose pre {
+		@apply bg-muted p-4 rounded-md overflow-x-auto text-sm my-4;
+	}
+
+	.prose code {
+		@apply bg-muted px-1.5 py-0.5 rounded text-foreground/90 text-sm;
+	}
+
+	.prose img {
+		@apply rounded-md my-6 w-full;
+	}
+
+	.prose table {
+		@apply w-full border-collapse my-6;
+	}
+
+	.prose table th {
+		@apply bg-muted p-2 text-left border border-border;
+	}
+
+	.prose table td {
+		@apply p-2 border border-border;
+	}
+}
+
+/* override google recaptcha */
+.grecaptcha-badge {
+	width: 70px !important;
+	overflow: hidden !important;
+	transition: all 0.3s ease !important;
+	@apply !left-2 sm:!left-4 !bottom-2 sm:!bottom-4;
+}
+.grecaptcha-badge:hover {
+	width: 256px !important;
+}
