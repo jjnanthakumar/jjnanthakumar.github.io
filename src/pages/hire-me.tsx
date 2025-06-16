@@ -40,6 +40,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import environment from "@/config/environment";
+import { serviceTiers, expertiseAreas } from "@/data/tiers";
 import { getCtaDataForPage } from "@/lib/get-cta-data-for-page";
 import { cn } from "@/lib/utils";
 import { serviceRequestService } from "@/services";
@@ -66,103 +67,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { z } from "zod";
-
-// Service packages with pricing tiers
-const serviceTiers = [
-	{
-		id: "basic",
-		name: "Basic",
-		price: "$15/hour",
-		description: "Perfect for small projects and quick tasks",
-		features: [
-			"Responsive design implementation",
-			"Bug fixes and improvements",
-			"Basic UI component development",
-			"Code review and optimization",
-			"Up to 20 hours per week",
-		],
-		popular: false,
-		cta: "Get Started",
-	},
-	{
-		id: "professional",
-		name: "Professional",
-		price: "$499/week",
-		description: "Ideal for medium-sized projects and ongoing development",
-		features: [
-			"Everything in Basic tier",
-			"Full-stack implementation",
-			"API integration",
-			"Performance optimization",
-			"Regular progress updates",
-			"Up to 40 hours per week",
-		],
-		popular: true,
-		cta: "Most Popular",
-	},
-	{
-		id: "enterprise",
-		name: "Enterprise",
-		price: "Custom",
-		description: "For large-scale projects and dedicated development",
-		features: [
-			"Everything in Professional tier",
-			"Dedicated development team",
-			"Technical leadership",
-			"Architecture planning",
-			"Code documentation",
-			"24/7 priority support",
-		],
-		popular: false,
-		cta: "Contact for Quote",
-	},
-];
-
-// Expertise areas
-const expertiseAreas = [
-	{
-		title: "Frontend Development",
-		description:
-			"Modern, high-performance web applications using React, Vue, and Angular with clean, maintainable code and best practices.",
-		icon: Code,
-		delay: "0.1s",
-	},
-	{
-		title: "UI/UX Implementation",
-		description:
-			"Pixel-perfect user interfaces from Figma and design mockups with attention to detail, consistency, and usability.",
-		icon: Lightbulb,
-		delay: "0.2s",
-	},
-	{
-		title: "Performance Optimization",
-		description:
-			"Optimize websites to load faster using code splitting, lazy loading, caching strategies, and minimizing render-blocking resources.",
-		icon: Gauge,
-		delay: "0.3s",
-	},
-	{
-		title: "API Integration",
-		description:
-			"Seamless integration of frontend applications with backend systems using RESTful APIs and Firebase.",
-		icon: Database,
-		delay: "0.4s",
-	},
-	{
-		title: "Web Animation",
-		description:
-			"Engaging animations using Framer Motion and CSS, from micro-interactions to complex page transitions.",
-		icon: Zap,
-		delay: "0.5s",
-	},
-	{
-		title: "Technical Leadership",
-		description:
-			"Leading development teams, conducting code reviews, and ensuring efficient collaboration with coding standards.",
-		icon: Users,
-		delay: "0.6s",
-	},
-];
 
 // Testimonials
 const testimonials = [
@@ -252,29 +156,11 @@ const faqItems = [
 
 // Availability slots
 const availabilitySlots = [
-	// {
-	// 	month: "April",
-	// 	year: 2024,
-	// 	availability: "Limited Availability",
-	// 	status: "limited",
-	// },
-	// {
-	// 	month: "May",
-	// 	year: 2024,
-	// 	availability: "Fully Booked",
-	// 	status: "booked",
-	// },
-	{
-		month: "May",
-		year: 2025,
-		availability: "Available",
-		status: "available",
-	},
 	{
 		month: "Jun",
 		year: 2025,
-		availability: "Available",
-		status: "available",
+		availability: "Limited Availability",
+		status: "limited",
 	},
 	{
 		month: "Jul",
@@ -410,7 +296,7 @@ const HireMePage = () => {
 		<div className="space-y-24">
 			<SEO
 				title="Hire Me"
-				description="Looking for a skilled frontend developer? Let's collaborate on your next project. Offering expertise in React, modern UI development, and performance optimization"
+				description="Looking for a skilled Architect/developer? Let's collaborate on your next project. Offering expertise in React, Python and Cloud solutions."
 				type="website"
 			/>
 
@@ -429,7 +315,7 @@ const HireMePage = () => {
 						</h1>
 
 						<p className="text-lg text-muted-foreground mb-8 leading-relaxed animate-fade-in">
-							I'm a frontend developer specializing in creating high-performance, user-friendly web
+							I'm a Technical Architect and Python developer specializing in creating high-performance, scalable, cloud native, and user-friendly web
 							applications. Whether you need a new website, a complex web application, or help with
 							an existing project, I'm here to bring your vision to life.
 						</p>

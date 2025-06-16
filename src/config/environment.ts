@@ -28,7 +28,7 @@ export const environment = {
 
 // Type-safe environment variable validation
 const validateEnv = () => {
-	const required = ["VITE_FIREBASE_API_KEY", "VITE_RECAPTCHA_SITE_KEY"];
+	const required = ["VITE_FIREBASE_API_KEY"];
 
 	const missing = required.filter((key) => !import.meta.env[key]);
 

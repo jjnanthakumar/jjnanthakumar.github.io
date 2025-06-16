@@ -31,11 +31,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import environment from "@/config/environment";
+import { services } from "@/data/services";
+// import environment from "@/config/environment";
 import { getCtaDataForPage } from "@/lib/get-cta-data-for-page";
 import { cn } from "@/lib/utils";
 import { serviceRequestService } from "@/services";
-import { getReCaptchaToken, validateCaptchaToken } from "@/services/recaptcha";
+// import { getReCaptchaToken, validateCaptchaToken } from "@/services/recaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -54,98 +55,6 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { z } from "zod";
 
-const services = [
-	{
-		id: "frontend",
-		title: "Frontend Development",
-		description:
-			"Modern, high-performance web applications using React, Vue, and Angular with clean, maintainable code and best practices.",
-		icon: Code,
-		price: "$15/hour",
-		features: [
-			"Responsive design for all devices",
-			"Cross-browser compatibility",
-			"Performance optimization",
-			"Accessibility compliance",
-			"Modern UI frameworks",
-		],
-	},
-	{
-		id: "ui-ux",
-		title: "UI/UX Implementation",
-		description:
-			"Pixel-perfect user interfaces from Figma and design mockups with attention to detail, consistency, and usability.",
-		icon: Lightbulb,
-		price: "$10/hour",
-		features: [
-			"Figma to code conversion",
-			"Design system implementation",
-			"Interactive prototypes",
-			"User-centered design",
-			"Usability testing",
-		],
-	},
-	{
-		id: "performance",
-		title: "Performance Optimization",
-		description:
-			"Optimize websites to load faster using code splitting, lazy loading, caching strategies, and minimizing render-blocking resources.",
-		icon: Gauge,
-		price: "$10/hour",
-		features: [
-			"Core Web Vitals improvement",
-			"Lighthouse score optimization",
-			"Bundle size reduction",
-			"Image optimization",
-			"Server-side rendering",
-		],
-	},
-	{
-		id: "api",
-		title: "API Integration",
-		description:
-			"Seamless integration of frontend applications with backend systems using RESTful APIs and Firebase.",
-		icon: Database,
-		price: "$10/hour",
-		features: [
-			"RESTful API integration",
-			"GraphQL implementation",
-			"Real-time data synchronization",
-			"Authentication & authorization",
-			"Error handling & retry logic",
-		],
-	},
-	{
-		id: "animation",
-		title: "Web Animation",
-		description:
-			"Engaging animations using Framer Motion and CSS, from micro-interactions to complex page transitions.",
-		icon: Zap,
-		price: "$10/hour",
-		features: [
-			"Smooth page transitions",
-			"Micro-interactions",
-			"SVG animations",
-			"3D effects",
-			"Performance-optimized animations",
-		],
-	},
-	{
-		id: "leadership",
-		title: "Technical Leadership",
-		description:
-			"Leading development teams, conducting code reviews, and ensuring efficient collaboration with coding standards.",
-		icon: Users,
-		price: "$25/hour",
-		features: [
-			"Code review & mentoring",
-			"Architecture planning",
-			"Best practices implementation",
-			"Team workflow optimization",
-			"Technical documentation",
-		],
-	},
-];
 
 const timeframes = [
 	{ id: "asap", label: "As soon as possible" },
