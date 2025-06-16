@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => {
 	const isProduction = mode === "production";
 
 	return {
-		base: "/me",
 		plugins: [react(), componentTagger()],
 		server: {
 			port: 8080,

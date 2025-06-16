@@ -3,7 +3,7 @@
 	"private": true,
 	"version": "1.0.0",
 	"type": "module",
-	"homepage": "https://jjnanthakumar.github.io/me",
+	"homepage": "https://jjnanthakumar.github.io",
 	"scripts": {
 		"dev": "vite --mode development",
 		"dev:prod": "vite --mode production",
