@@ -19,7 +19,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "22" # Specify the Node.js version
-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
       # Step 3: Install dependencies
       - name: Install Dependencies
         run: pnpm install
