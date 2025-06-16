@@ -132,7 +132,7 @@ const ListConsultationsPage = () => {
 	// Mutation for generating time slots
 	const generateSlotsMutation = useMutation({
 		mutationFn: () =>
-			withLoading(() => consultationService.generateTimeSlotsForNextDays(), {
+			withLoading(() => consultationService.generateTimeSlotsForNextDays(90), {
 				loadingText: "Loading generate time slots...",
 			}),
 		onSuccess: () => {
