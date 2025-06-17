@@ -109,10 +109,10 @@ I'll be happy to review and collaborate 💜
 
 ---
 
-## 📝 License
+## License & Attribution  
+This project is based on [wismannur.pro](https://github.com/wismannur/wismannur.pro) by [Wisnu Nurmochtar](https://github.com/wismannur), which was released under the **MIT License** (as stated in the original README).  
 
-MIT License © [Nanthakumar](https://github.com/jjnanthakumar)
-
+Modifications made by jjnanthakumar are also licensed under the MIT License.  
 ---
 
 ## 📬 Contact
