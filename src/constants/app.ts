@@ -3,7 +3,7 @@ const env = import.meta.env;
 export const APP_CONFIG = {
 	ITEMS_PER_PAGE: 10, // Pagination default
 	STALE_TIME: 1000 * 60 * 5, // 5 minutes
-	COPYRIGHT: "© 2025 Nanthakumar. All rights reserved.",
+	COPYRIGHT: "© 2025 Nanthakumar. Based on open-source code licensed under the MIT License.",
 	VERSION: "1.0.0",
 	SITE_NAME: "Nanthakumar",
 	SITE_URL: "https://jjnanthakumar.github.io",
@@ -22,7 +22,7 @@ export const SOCIAL_LINKS = [
 export const CONTACT_INFO = {
 	EMAIL: "jjnanthakumar477@gmail.com",
 	LOCATION: "Chennai, TamilNadu, India",
-	TIMEZONE: "IST, UTC+05:00",
+	TIMEZONE: "IST, UTC+05:30",
 } as const;
 
 export const SERVICE_RATES = {

@@ -27,9 +27,9 @@ export const Footer = () => {
 		<footer className="border-t border-border/40 bg-gradient-to-b from-background to-muted/20 p-1">
 			<div className="container px-2 md:px-0 py-2 mx-auto">
 				<div className="border-t border-border/30 mt-2 pt-2 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground gap-4">
-					<p>&copy; {currentYear} Nanthakumar. All rights reserved.</p>
+					<p>&copy; {currentYear} Nanthakumar. Based on open-source code licensed under the MIT License.</p>
 					<p className="flex items-center">
-						Made with <Heart size={14} className="mx-1 text-red-500" /> using React & Tailwind
+						Made with <Heart size={14} className="mx-1 text-red-500" /> using React, Tailwind & Firebase
 					</p>
 					<a
 						className="hover:underline flex"

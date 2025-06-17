@@ -56,7 +56,7 @@ const contactDetails = [
 	{
 		icon: Clock,
 		title: "Time Zone",
-		content: "IST, UTC+05:00",
+		content: "IST, UTC+05:30",
 	},
 ];
 

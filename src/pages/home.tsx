@@ -1,79 +1,23 @@
-import { BlogCard } from "@/components/cards/blog-card";
 import PowerfulCTACard from "@/components/cards/powerful-cta-card";
 import { ProjectCard } from "@/components/cards/project-card";
 import { SEO } from "@/components/common/seo";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
-import { VideoPlayer } from "@/components/ui/video-player";
+import { services } from "@/data/services";
 import { getCtaDataForPage } from "@/lib/get-cta-data-for-page";
 import { cn } from "@/lib/utils";
-import { blogService, projectService } from "@/services";
+import { projectService } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import {
-	ArrowRight,
-	ChevronRight,
-	Code,
-	Database,
-	Gauge,
-	Lightbulb,
-	Sparkles,
-	Users,
-	Zap,
-} from "lucide-react";
+import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import { Link } from "react-router";
-
-const services = [
-	{
-		title: "Frontend Development",
-		description:
-			"I specialize in building modern, high-performance web applications using React, Vue, and Angular. With a focus on clean, maintainable code and best practices, I ensure seamless user experiences across different devices and screen sizes.",
-		icon: Code,
-		delay: "0.1s",
-	},
-	{
-		title: "UI/UX Implementation",
-		description:
-			"I translate Figma and design mockups into responsive, pixel-perfect user interfaces. With attention to detail, I ensure consistency, accessibility, and usability, creating interfaces that not only look great but also provide an intuitive user experience.",
-		icon: Lightbulb,
-		delay: "0.2s",
-	},
-	{
-		title: "Performance Optimization",
-		description:
-			"I optimize websites to load faster and run efficiently by implementing techniques like code splitting, lazy loading, caching strategies, and minimizing render-blocking resources. A fast website not only improves user experience but also boosts SEO rankings.",
-		icon: Gauge,
-		delay: "0.3s",
-	},
-	{
-		title: "API Integration",
-		description:
-			"I seamlessly integrate frontend applications with backend systems using RESTful and Firebase. Whether it's fetching real-time data, handling authentication, or synchronizing state, I ensure smooth and secure communication between the client and server.",
-		icon: Database,
-		delay: "0.4s",
-	},
-	{
-		title: "Web Animation",
-		description:
-			"I bring websites to life with smooth and engaging animations using Framer Motion, and CSS. From micro-interactions to complex page transitions, I create visually appealing effects that enhance user engagement and storytelling.",
-		icon: Zap,
-		delay: "0.5s",
-	},
-	{
-		title: "Technical Leadership",
-		description:
-			"I have experience leading small development teams, conducting code reviews, and ensuring efficient collaboration. By setting coding standards, improving workflows, and mentoring team members, I help drive projects forward effectively.",
-		icon: Users,
-		delay: "0.6s",
-	},
-];
 
 const Home = () => {
 	const ctaData = getCtaDataForPage("home");
 
 	const { data: projects = [], isLoading: isProjectsLoading } = useQuery({
 		queryKey: ["latestProjects"],
-		queryFn: () => projectService.getLatest(2),
+		queryFn: () => projectService.getFeaturedProjects(),
 	});
 
 	return (
@@ -101,7 +45,7 @@ const Home = () => {
 								<p className="text-lg text-muted-foreground mb-8 leading-relaxed">
 									a{" "}
 									<span className="font-semibold">
-										a Technical Architect and Full Stack Engineer{" "}
+										Technical Architect and Full Stack Engineer{" "}
 									</span>{" "}
 									passionate about crafting high-performance web applications and building scalable
 									systems, seamless API integrations, and intuitive user experiences. Let's bring
