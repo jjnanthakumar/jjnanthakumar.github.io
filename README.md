@@ -1,6 +1,6 @@
 # 👋 Nanthakumar J J — Personal Portfolio
 
-A modern, fast, and fully open-source personal website to showcase my work as a **Frontend Software Engineer** and share my technical writings. Built with React, TypeScript, and Firebase.
+A modern, fast, and fully open-source personal website to showcase my work as a **Technical Architect & Python Developer** and share my technical writings. Built with React, TypeScript, and Firebase.
 
 ![Website Preview](https://pub-2ab98e96400d470096cf10abb107a2c8.r2.dev/meta_data_folio_preview.png)
 
@@ -12,8 +12,7 @@ A modern, fast, and fully open-source personal website to showcase my work as a 
 ## 🚀 Features
 
 - 🎯 **Portfolio**: Highlighting my selected projects with in-depth case studies
-- ✍️ **Blog Platform**: MDX-powered articles with custom components
-- ⚙️ **CMS Dashboard**: Built-in system to manage blog & projects
+- ⚙️ **CMS Dashboard**: Built-in system to manage projects & certifications
 - 📈 **Visitor Analytics**: Integrated with [Umami](https://umami.is)
 - ⚡ **Optimized for Speed**: Powered by Vite for ultra-fast performance
 - 📱 **Responsive Design**: Tailwind CSS for mobile-first layouts
@@ -68,7 +67,6 @@ npm run dev
 
 2. Fill in the environment variables with your actual values:
 	- Firebase configuration from your Firebase Console
-	- reCAPTCHA keys from Google reCAPTCHA Admin Console
 	- Analytics IDs from your Umami dashboard
 	- Other service-specific configurations
 
@@ -121,9 +119,3 @@ Modifications made by jjnanthakumar are also licensed under the MIT License.
 - 🐙 GitHub: [@jjnanthakumar](https://github.com/jjnanthakumar)
 - 🐦 Twitter/X: [@jjnanthakumar](https://x.com/jjnanthakumar)
 - 💼 LinkedIn: [jjnanthakumar](https://linkedin.com/in/jjnanthakumar)
-
-## 📝 Credit
-
-Inspired from https://www.wismannur.pro/
-
-
