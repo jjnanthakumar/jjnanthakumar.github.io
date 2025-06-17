@@ -52,7 +52,7 @@ export function PageLoader({ className }: PageLoaderProps) {
               className="mb-8 text-3xl font-bold tracking-tighter flex items-center"
             >
               <span className="text-primary mr-1">&lt;</span>
-              <span>NK</span>
+              <span>NJ</span>
               <span className="text-primary ml-1">/&gt;</span>
             </motion.div>
 

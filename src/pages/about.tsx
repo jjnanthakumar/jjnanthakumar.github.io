@@ -4,6 +4,7 @@ import PowerfulCTACard from "@/components/cards/powerful-cta-card";
 import { SEO } from "@/components/common/seo";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
+import { skills, experiences, education } from "@/data/about";
 import { getCtaDataForPage } from "@/lib/get-cta-data-for-page";
 import { cn } from "@/lib/utils";
 import {
@@ -23,55 +24,6 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 
-// Add this style definition right after the useState line
-const experiences = [
-	{
-		title: "Senior Software Engineer",
-		company: "UB Technology Innovations",
-		period: "Apr 2024 - Present",
-		location: "Chennai",
-		description: "",
-		// description:
-		// 	"Problem: The platform needed a complete UI overhaul to improve user engagement and reduce bounce rates. Role: Led frontend development for the career platform, focusing on responsive design and performance optimization. Action: Implemented a component-based architecture using React and TypeScript, created a design system, and optimized for mobile devices. Quantifiable results: Improved page load times by 40%, increased user engagement by 35%, and reduced bounce rates by 25%.",
-	},
-];
-
-const education = [
-	{
-		degree: "Responsive Web Design",
-		institution: "Freecodecamp.org",
-		period: "2021",
-		description: "",
-	},
-];
-
-const skills = [
-	"TypeScript",
-	"JavaScript",
-	"React.js",
-	"Next.js",
-	"Vue.js",
-	"Nuxt.js",
-	"HTML5",
-	"CSS3",
-	"Material UI",
-	"shadcn/ui",
-	"React Hook Form",
-	"Vuetify",
-	"Vuelidate",
-	"Tailwind CSS",
-	"Framer Motion",
-	"Zustand",
-	"Pinia",
-	"TanStack Query",
-	"Firebase",
-	"RESTful APIs",
-	"Node.js",
-	"Git",
-	"UI/UX Design",
-	"Responsive Design",
-	"Performance Optimization",
-];
 
 const About = () => {
 	const ctaData = getCtaDataForPage("about");
@@ -188,8 +140,8 @@ const About = () => {
 							<div
 								key={skill}
 								className={cn(
-									"p-4 bg-background rounded-xl border border-border/50 shadow-sm",
-									"hover:border-primary/30 dark:hover:border-primary/70 hover:shadow-md transition-all duration-300",
+									"p-4 bg-background rounded-xl border-2 border-border/10 shadow-sm",
+									"hover:border-primary/80 dark:hover:border-primary/90 hover:shadow-md transition-all duration-300",
 									"flex items-center justify-center text-center",
 								)}
 								style={{ animationDelay: `${index * 0.05}s` }}
@@ -202,7 +154,7 @@ const About = () => {
 			</section>
 
 			{/* Experience & Education Section */}
-			<section className="py-24 relative">
+			<section className="py-7 relative">
 				<div className="container max-w-7xl px-4">
 					<SectionHeader
 						title={activeTab === "experience" ? "Work Experience" : "Education & Certification"}
@@ -308,24 +260,9 @@ const About = () => {
 														{exp.description && (
 															<div className="mt-5 text-muted-foreground leading-relaxed">
 																{exp.description.split(". ").map((sentence, i) => {
-																	if (
-																		sentence.startsWith("Problem:") ||
-																		sentence.startsWith("Role:") ||
-																		sentence.startsWith("Action:") ||
-																		sentence.startsWith("Quantifiable results:")
-																	) {
-																		const [prefix, content] = sentence.split(": ");
-																		return (
-																			<p key={i} className="mb-2">
-																				<span className="font-semibold text-primary">
-																					{prefix}:{" "}
-																				</span>
-																				{content}
-																			</p>
-																		);
-																	}
 																	return (
 																		<p key={i} className="mb-2">
+																			<span className="font-semibold text-primary">{"⚡"} </span>
 																			{sentence}
 																		</p>
 																	);

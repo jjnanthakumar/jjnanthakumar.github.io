@@ -76,8 +76,9 @@ export const Navbar = () => {
 						<div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/40 dark:from-primary/50 dark:to-primary/90 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
 						<div className="relative flex items-center">
 							<span className="text-primary mr-1">&lt;</span>
-							<span>Nanthakumar</span>
+							<span>NJ</span>
 							<span className="text-primary ml-1">/&gt;</span>
+							<i className="text-primary text-sm ml-2">Where Tech meets impact!</i>
 						</div>
 					</div>
 				</Link>

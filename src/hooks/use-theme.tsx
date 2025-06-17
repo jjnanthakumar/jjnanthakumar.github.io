@@ -22,7 +22,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [colorScheme, setColorScheme] = useState<ColorScheme>(() => {
 		const stored = localStorage.getItem("colorScheme") as ColorScheme;
-		return stored || "green";
+		return stored || "blue";
 	});
 
 	const [isDark, setIsDark] = useState(false);
