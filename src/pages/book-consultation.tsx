@@ -57,13 +57,11 @@ import { z } from "zod";
 
 // Constants
 const TOPICS = [
-	"Website Development",
 	"Web Application",
-	"UI/UX Design",
-	"Frontend Development",
 	"Code Review",
 	"Technical Consultation",
 	"Project Planning",
+	"Cloud Native Solutions",
 	"Other",
 ];
 

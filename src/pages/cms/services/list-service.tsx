@@ -169,10 +169,8 @@ const CmsServices = () => {
 	const getServiceTypeLabel = (serviceType: string) => {
 		const serviceTypes: Record<string, string> = {
 			frontend: "Frontend Development",
-			"ui-ux": "UI/UX Implementation",
 			performance: "Performance Optimization",
 			api: "API Integration",
-			animation: "Web Animation",
 			leadership: "Technical Leadership",
 		};
 

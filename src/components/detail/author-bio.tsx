@@ -143,7 +143,7 @@ const AuthorBio = () => {
 								</h3>
 								<p className="text-muted-foreground mb-4">
 									{authorData?.bio ||
-										"Frontend developer passionate about creating beautiful, functional, and user-friendly web applications."}
+										"Pythonista specializing in backend development (Django, Flask, FastAPI, React) and cloud solutions with Azure DevOps. Full-stack engineer with a knack for data pipelines, and .NET—turning complex problems into scalable, efficient systems."}
 								</p>
 
 								{/* Call-to-actions */}
