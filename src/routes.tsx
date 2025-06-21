@@ -10,6 +10,7 @@ const Home = lazy(() => import("@/pages/home"));
 const Projects = lazy(() => import("@/pages/projects"));
 const ProjectDetail = lazy(() => import("@/pages/project-detail"));
 const About = lazy(() => import("@/pages/about"));
+const OpenSource = lazy(() => import("@/pages/open-source"));
 const Contact = lazy(() => import("@/pages/contact"));
 const Services = lazy(() => import("@/pages/services"));
 const BookConsultation = lazy(() => import("@/pages/book-consultation"));
@@ -40,6 +41,7 @@ const AppRoutes = () => (
 					<Route path="/projects" element={<Projects />} />
 					<Route path="/projects/:slug" element={<ProjectDetail />} />
 					<Route path="/about" element={<About />} />
+					<Route path="/open-source" element={<OpenSource />} />
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/services" element={<Services />} />
 					<Route path="/book-consultation" element={<BookConsultation />} />
