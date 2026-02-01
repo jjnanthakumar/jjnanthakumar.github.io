@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
 	collection,
 	deleteDoc,
@@ -89,8 +89,7 @@ interface CertificationData {
 	updatedAt?: any;
 }
 
-// Number of certifications to fetch per page
-const CERTIFICATIONS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 30;
 
 const CmsCertifications = () => {
 	const { user } = useAuth();
@@ -98,17 +97,14 @@ const CmsCertifications = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [filterStatus, setFilterStatus] = useState<string>("all");
 	const [certificationToDelete, setCertificationToDelete] = useState<string | null>(null);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
-	const [hasMore, setHasMore] = useState(false);
-	const [filteredCertifications, setFilteredCertifications] = useState<CertificationData[]>([]);
 
-	const fetchCertifications = async () => {
+	const fetchCertifications = async ({ pageParam }: { pageParam?: QueryDocumentSnapshot<DocumentData> | null }) => {
 		try {
-			// Build the query - start simple
+			// Build the query
 			let certificationsQuery = query(
 				collection(db, "certifications"),
-				orderBy("createdAt", "desc")
+				orderBy("createdAt", "desc"),
+				limit(ITEMS_PER_PAGE)
 			);
 
 			// Add status filter if provided
@@ -117,38 +113,18 @@ const CmsCertifications = () => {
 				certificationsQuery = query(
 					collection(db, "certifications"),
 					where("isPublished", "==", isPublished),
-					orderBy("createdAt", "desc")
+					orderBy("createdAt", "desc"),
+					limit(ITEMS_PER_PAGE)
 				);
 			}
 
-			// Add pagination
-			if (lastVisible && currentPage > 1) {
-				certificationsQuery = query(
-					certificationsQuery,
-					startAfter(lastVisible),
-					limit(CERTIFICATIONS_PER_PAGE)
-				);
-			} else {
-				certificationsQuery = query(certificationsQuery, limit(CERTIFICATIONS_PER_PAGE));
+			// Add pagination cursor
+			if (pageParam) {
+				certificationsQuery = query(certificationsQuery, startAfter(pageParam));
 			}
 
 			// Execute the query
 			const snapshot = await getDocs(certificationsQuery);
-
-			// Get the last visible document for pagination
-			const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
-
-			// Check if there are more results
-			let hasMoreResults = false;
-			if (lastVisibleDoc) {
-				const nextQuery = query(
-					collection(db, "certifications"),
-					startAfter(lastVisibleDoc),
-					limit(1)
-				);
-				const nextSnapshot = await getDocs(nextQuery);
-				hasMoreResults = !nextSnapshot.empty;
-			}
 
 			// Convert the documents to Certification objects
 			const certifications = snapshot.docs.map((doc) => ({
@@ -156,11 +132,12 @@ const CmsCertifications = () => {
 				...doc.data(),
 			})) as CertificationData[];
 
+			// Get the last visible document for next page
+			const lastVisible = snapshot.docs[snapshot.docs.length - 1];
 
 			return {
 				certifications,
-				lastVisible: lastVisibleDoc,
-				hasMore: hasMoreResults,
+				nextCursor: snapshot.docs.length === ITEMS_PER_PAGE ? lastVisible : undefined,
 			};
 		} catch (error) {
 			console.error("Error fetching certifications:", error);
@@ -168,34 +145,36 @@ const CmsCertifications = () => {
 		}
 	};
 
-	const { data, isLoading, refetch, isRefetching, error } = useQuery({
-		queryKey: ["certifications", user?.uid, currentPage, filterStatus],
+	const {
+		data,
+		isLoading,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+		refetch,
+		isRefetching,
+		error,
+	} = useInfiniteQuery({
+		queryKey: ["cms-certifications", user?.uid, filterStatus],
 		queryFn: fetchCertifications,
+		getNextPageParam: (lastPage) => lastPage.nextCursor,
 		enabled: !!user,
+		initialPageParam: null,
+		staleTime: 30000,
 	});
 
-	useEffect(() => {
-		if (data) {
-			setLastVisible(data.lastVisible);
-			setHasMore(data.hasMore);
+	// Flatten all pages into single array
+	const certifications = data?.pages.flatMap((page) => page.certifications) ?? [];
 
-			// Apply search filter
-			if (searchQuery) {
-				const filtered = data.certifications.filter(
-					(cert) =>
-						cert.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-						cert.issuer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-						cert.description?.toLowerCase().includes(searchQuery.toLowerCase())
-				);
-				setFilteredCertifications(filtered);
-			} else {
-				setFilteredCertifications(data.certifications);
-			}
-		} else {
-			// If no data, make sure filtered list is empty
-			setFilteredCertifications([]);
-		}
-	}, [data, searchQuery]);
+	// Client-side search filtering
+	const filteredCertifications = searchQuery
+		? certifications.filter(
+				(cert) =>
+					cert.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+					cert.issuer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+					cert.description?.toLowerCase().includes(searchQuery.toLowerCase())
+		  )
+		: certifications;
 
 	// Show error if query fails
 	useEffect(() => {
@@ -423,10 +402,11 @@ const CmsCertifications = () => {
 					</Button>
 				</div>
 
-				{/* Debug Info */}
-				{!isLoading && (
+				{/* Stats */}
+				{!isLoading && certifications.length > 0 && (
 					<div className="mb-4 text-sm text-muted-foreground">
-						Total: {data?.certifications?.length || 0} | Filtered: {filteredCertifications.length}
+						Showing {filteredCertifications.length} of {certifications.length} certifications
+						{hasNextPage && " (scroll to load more)"}
 					</div>
 				)}
 
@@ -436,6 +416,7 @@ const CmsCertifications = () => {
 						columns={columns}
 						data={filteredCertifications}
 						isLoading={isLoading}
+						keyField="id"
 						emptyMessage={
 							isLoading
 								? "Loading certifications..."
@@ -446,26 +427,24 @@ const CmsCertifications = () => {
 					/>
 				</div>
 
-				{/* Pagination */}
-				{(currentPage > 1 || hasMore) && (
-					<div className="flex items-center justify-between mt-6">
+				{/* Load More Button */}
+				{hasNextPage && (
+					<div className="flex justify-center mt-6">
 						<Button
 							variant="outline"
-							onClick={() => {
-								setCurrentPage((prev) => Math.max(1, prev - 1));
-								setLastVisible(null);
-							}}
-							disabled={currentPage === 1 || isLoading}
+							onClick={() => fetchNextPage()}
+							disabled={isFetchingNextPage}
 						>
-							Previous
-						</Button>
-						<span className="text-sm text-muted-foreground">Page {currentPage}</span>
-						<Button
-							variant="outline"
-							onClick={() => setCurrentPage((prev) => prev + 1)}
-							disabled={!hasMore || isLoading}
-						>
-							Next
+							{isFetchingNextPage ? (
+								<>
+									<RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+									Loading more...
+								</>
+							) : (
+								<>
+									Load More
+								</>
+							)}
 						</Button>
 					</div>
 				)}

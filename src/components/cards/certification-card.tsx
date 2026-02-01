@@ -81,44 +81,50 @@ export function CertificationCard({ certification, className }: CertificationCar
 				</div>
 			</CardHeader>
 
-			<CardContent className="pt-0 space-y-4 flex-1">
-				<p className="text-sm text-muted-foreground">{description}</p>
+			<CardContent className="pt-0 space-y-3 flex-1">
+				<p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
 
 				{/* Date Information */}
-				<div className="space-y-2 text-sm">
-					<div className="flex items-center gap-2 text-muted-foreground">
-						<Calendar className="w-4 h-4" />
-						<span>Issued: {formatDate(issueDate)}</span>
+				<div className="grid grid-cols-2 gap-2 text-sm">
+					<div className="flex items-center gap-1 text-muted-foreground">
+						<Calendar className="w-4 h-4 flex-shrink-0" />
+						<span className="truncate">Issued: {formatDate(issueDate)}</span>
 					</div>
 					{expiryDate && (
-						<div className="flex items-center gap-2">
-							<Calendar className="w-4 h-4" />
+						<div className="flex items-center gap-1 justify-end">
+							<Calendar className="w-4 h-4 flex-shrink-0" />
 							<span
 								className={cn(
+									"truncate",
 									isExpired && "text-destructive",
 									isExpiringSoon && "text-orange-500",
 									!isExpired && !isExpiringSoon && "text-muted-foreground",
 								)}
 							>
 								Expires: {formatDate(expiryDate)}
-								{isExpired && " (Expired)"}
-								{isExpiringSoon && " (Expiring Soon)"}
 							</span>
 						</div>
 					)}
 					{!expiryDate && (
-						<div className="flex items-center gap-2 text-green-600 dark:text-green-500">
-							<ShieldCheck className="w-4 h-4" />
-							<span className="font-medium">No Expiration</span>
+						<div className="flex items-center justify-end gap-1 text-green-600 dark:text-green-500">
+							<ShieldCheck className="w-4 h-4 flex-shrink-0" />
+							<span className="font-medium truncate">No Expiration</span>
 						</div>
 					)}
 				</div>
+				{expiryDate && (isExpired || isExpiringSoon) && (
+					<div className="text-xs text-center">
+						<Badge variant={isExpired ? "destructive" : "secondary"} className="text-xs">
+							{isExpired ? "Expired" : "Expiring Soon"}
+						</Badge>
+					</div>
+				)}
 
 				{/* Credential ID */}
 				{credentialId && (
 					<div className="text-sm">
 						<span className="text-muted-foreground">Credential ID: </span>
-						<code className="text-xs bg-muted px-2 py-1 rounded">{credentialId}</code>
+						<code className="text-xs bg-muted px-2 py-1 rounded break-all">{credentialId}</code>
 					</div>
 				)}
 

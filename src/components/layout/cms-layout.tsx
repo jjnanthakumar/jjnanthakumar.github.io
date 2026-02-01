@@ -111,16 +111,16 @@ export const CmsLayout = ({ children }: CmsLayoutProps) => {
 		{
 			group: "Content",
 			items: [
-				{
-					label: "Blog Posts",
-					icon: <FileText className="h-4 w-4" />,
-					path: "/cms/blogs",
-				},
-				{
-					label: "Add Blog",
-					icon: <PenSquare className="h-4 w-4" />,
-					path: "/cms/blogs/form",
-				},
+				// {
+				// 	label: "Blog Posts",
+				// 	icon: <FileText className="h-4 w-4" />,
+				// 	path: "/cms/blogs",
+				// },
+				// {
+				// 	label: "Add Blog",
+				// 	icon: <PenSquare className="h-4 w-4" />,
+				// 	path: "/cms/blogs/form",
+				// },
 				{
 					label: "Projects",
 					icon: <Folder className="h-4 w-4" />,
@@ -135,11 +135,6 @@ export const CmsLayout = ({ children }: CmsLayoutProps) => {
 					label: "Certifications",
 					icon: <Award className="h-4 w-4" />,
 					path: "/cms/certifications",
-				},
-				{
-					label: "Add Certification",
-					icon: <Award className="h-4 w-4" />,
-					path: "/cms/certifications/form",
 				},
 				{
 					label: "Contacts",
