@@ -19,6 +19,7 @@ const Auth = lazy(() => import("@/pages/auth"));
 const TermsOfService = lazy(() => import("@/pages/terms-of-service"));
 const PrivacyPolicy = lazy(() => import("@/pages/privacy-policy"));
 const HireMePage = lazy(() => import("@/pages/hire-me"));
+const Certifications = lazy(() => import("@/pages/certifications"));
 
 // Archive routes
 const Offers = lazy(() => import("@/pages/offers"));
@@ -45,6 +46,7 @@ const AppRoutes = () => (
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/services" element={<Services />} />
 					<Route path="/book-consultation" element={<BookConsultation />} />
+					<Route path="/certifications" element={<Certifications />} />
 					<Route path="/terms-of-service" element={<TermsOfService />} />
 					<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 					<Route path="/hire-me" element={<HireMePage />} />

@@ -41,6 +41,7 @@ import {
 	LogOut,
 	MessageSquare,
 	Moon,
+	Award,
 	PenSquare,
 	Sun,
 	User,
@@ -129,6 +130,16 @@ export const CmsLayout = ({ children }: CmsLayoutProps) => {
 					label: "Add Project",
 					icon: <FolderPlus className="h-4 w-4" />,
 					path: "/cms/projects/form",
+				},
+				{
+					label: "Certifications",
+					icon: <Award className="h-4 w-4" />,
+					path: "/cms/certifications",
+				},
+				{
+					label: "Add Certification",
+					icon: <Award className="h-4 w-4" />,
+					path: "/cms/certifications/form",
 				},
 				{
 					label: "Contacts",

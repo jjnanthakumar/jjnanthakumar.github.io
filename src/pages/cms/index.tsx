@@ -6,6 +6,8 @@ import { Route, Routes } from "react-router";
 const Dashboard = lazy(() => import("@/pages/cms/dashboard"));
 const FormProject = lazy(() => import("@/pages/cms/projects/form-project"));
 const CmsProjects = lazy(() => import("@/pages/cms/projects/list-project"));
+const FormCertification = lazy(() => import("@/pages/cms/certifications/form-certification"));
+const CmsCertifications = lazy(() => import("@/pages/cms/certifications/list-certification"));
 const CmsContacts = lazy(() => import("@/pages/cms/contacts/list-contact"));
 const CmsServices = lazy(() => import("@/pages/cms/services/list-service"));
 const CmsConsultations = lazy(() => import("@/pages/cms/consultations/list-consultations"));
@@ -22,6 +24,9 @@ const CmsRoutes = () => {
 				<Route path="/projects" element={<CmsProjects />} />
 				<Route path="/projects/form" element={<FormProject />} />
 				<Route path="/projects/form/:id" element={<FormProject />} />
+				<Route path="/certifications" element={<CmsCertifications />} />
+				<Route path="/certifications/form" element={<FormCertification />} />
+				<Route path="/certifications/form/:id" element={<FormCertification />} />
 				<Route path="/contacts" element={<CmsContacts />} />
 				<Route path="/services" element={<CmsServices />} />
 				<Route path="/consultations" element={<CmsConsultations />} />
