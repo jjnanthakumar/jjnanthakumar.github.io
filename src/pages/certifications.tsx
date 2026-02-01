@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const CertificationsPage = () => {
 	const [selectedSource, setSelectedSource] = useState<string | null>(null);
-	const [enterpriseOnly, setEnterpriseOnly] = useState(false);
+	const [enterpriseOnly, setEnterpriseOnly] = useState(true);
 
 	// Fetch all certifications from Firebase
 	const { data: certifications = [], isLoading } = useQuery({
