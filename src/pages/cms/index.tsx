@@ -12,6 +12,8 @@ const CmsContacts = lazy(() => import("@/pages/cms/contacts/list-contact"));
 const CmsServices = lazy(() => import("@/pages/cms/services/list-service"));
 const CmsConsultations = lazy(() => import("@/pages/cms/consultations/list-consultations"));
 const CmsConsultationSettings = lazy(() => import("@/pages/cms/consultations/settings"));
+const CmsInvoices = lazy(() => import("@/pages/cms/invoices/list-invoice"));
+const FormInvoice = lazy(() => import("@/pages/cms/invoices/form-invoice"));
 const CmsProfile = lazy(() => import("@/pages/cms/profile"));
 const CmsSettings = lazy(() => import("@/pages/cms/settings"));
 
@@ -31,6 +33,9 @@ const CmsRoutes = () => {
 				<Route path="/services" element={<CmsServices />} />
 				<Route path="/consultations" element={<CmsConsultations />} />
 				<Route path="/consultations/settings" element={<CmsConsultationSettings />} />
+				<Route path="/invoices" element={<CmsInvoices />} />
+				<Route path="/invoices/form" element={<FormInvoice />} />
+				<Route path="/invoices/form/:id" element={<FormInvoice />} />
 				<Route path="/profile" element={<CmsProfile />} />
 				<Route path="/settings" element={<CmsSettings />} />
 			</Route>

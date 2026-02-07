@@ -43,6 +43,7 @@ import {
 	Moon,
 	Award,
 	PenSquare,
+	Receipt,
 	Sun,
 	User,
 } from "lucide-react";
@@ -150,6 +151,11 @@ export const CmsLayout = ({ children }: CmsLayoutProps) => {
 					label: "Consultations",
 					icon: <CalendarDays className="h-4 w-4" />,
 					path: "/cms/consultations",
+				},
+				{
+					label: "Invoices",
+					icon: <Receipt className="h-4 w-4" />,
+					path: "/cms/invoices",
 				},
 			],
 		},
