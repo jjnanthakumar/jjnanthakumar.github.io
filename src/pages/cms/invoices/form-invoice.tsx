@@ -39,6 +39,21 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
+const getCurrencySymbol = (currency: string) => {
+	switch (currency) {
+		case "USD":
+			return "$";
+		case "INR":
+			return "₹";
+		case "EUR":
+			return "€";
+		case "GBP":
+			return "£";
+		default:
+			return "$";
+	}
+};
+
 const lineItemSchema = z.object({
 	id: z.string(),
 	category: z.string().min(1, "Category is required"),
@@ -132,7 +147,7 @@ const InvoiceForm = () => {
 			tax: 0,
 			taxPercentage: 0,
 			notes: "It was great doing business with you. Please make the payment by the due date.",
-			terms: "Payment is due within 30 days. Late payments may incur additional fees. Please include the invoice number with your payment.",
+			terms: "Payment is due within 10 days. Late payments may incur additional fees. Please include the invoice number with your payment.",
 			currency: "USD",
 		},
 	});
@@ -867,7 +882,7 @@ const InvoiceForm = () => {
 							<div className="space-y-3 pt-4 border-t">
 								<div className="flex justify-between text-sm">
 									<span className="font-medium">Subtotal:</span>
-									<span className="font-semibold">${subtotal.toFixed(2)}</span>
+									<span className="font-semibold">{getCurrencySymbol(form.watch("currency"))}{subtotal.toFixed(2)}</span>
 								</div>
 
 								<div className="grid gap-4 md:grid-cols-2">
@@ -876,7 +891,7 @@ const InvoiceForm = () => {
 										name="discount"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Discount ($)</FormLabel>
+												<FormLabel>Discount ({getCurrencySymbol(form.watch("currency"))})</FormLabel>
 												<FormControl>
 													<Input type="number" step="0.01" placeholder="0.00" {...field} />
 												</FormControl>
@@ -890,7 +905,7 @@ const InvoiceForm = () => {
 										name="tax"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Tax ($)</FormLabel>
+												<FormLabel>Tax ({getCurrencySymbol(form.watch("currency"))})</FormLabel>
 												<FormControl>
 													<Input type="number" step="0.01" placeholder="0.00" {...field} />
 												</FormControl>
@@ -902,7 +917,7 @@ const InvoiceForm = () => {
 
 								<div className="flex justify-between text-lg font-bold pt-2 border-t">
 									<span>Total:</span>
-									<span className="text-primary">${total.toFixed(2)}</span>
+									<span className="text-primary">{getCurrencySymbol(form.watch("currency"))}{total.toFixed(2)}</span>
 								</div>
 							</div>
 						</CardContent>
