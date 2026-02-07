@@ -1,7 +1,9 @@
 "use client";
 
 import PowerfulCTACard from "@/components/cards/powerful-cta-card";
+import { QuickContactCTA } from "@/components/cta/quick-contact-cta";
 import { SEO } from "@/components/common/seo";
+import { StatsSection } from "@/components/stats/stats-section";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -231,6 +233,11 @@ const Services = () => {
 						})}
 					</div>
 				</div>
+			</section>
+
+			{/* Stats Section */}
+			<section className="container px-4 max-w-6xl mx-auto">
+				<StatsSection />
 			</section>
 
 			{/* Process Section */}
@@ -609,6 +616,9 @@ const Services = () => {
 					<PowerfulCTACard {...ctaData} />
 				</div>
 			</section>
+
+			{/* Quick Contact CTA */}
+			<QuickContactCTA />
 		</div>
 	);
 };

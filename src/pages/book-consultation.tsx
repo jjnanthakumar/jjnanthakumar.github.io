@@ -31,7 +31,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { consultationService } from "@/services/consultations";
-import { TimeSlot } from "@/services/consultations/types";
+import { AvailabilitySettings, TimeSlot } from "@/services/consultations/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -97,6 +97,8 @@ const BookConsultationPage = () => {
 	const [formStep, setFormStep] = useState(1);
 	const [bookingComplete, setBookingComplete] = useState(false);
 	const [timeSlotsLoading, setTimeSlotsLoading] = useState(false);
+	const [availabilitySettings, setAvailabilitySettings] = useState<AvailabilitySettings | null>(null);
+	const [settingsLoading, setSettingsLoading] = useState(true);
 
 	// Initialize form
 	const form = useForm<BookingFormValues>({
@@ -111,11 +113,42 @@ const BookConsultationPage = () => {
 		},
 	});
 
+	// Fetch availability settings on component mount
+	useEffect(() => {
+		const fetchSettings = async () => {
+			try {
+				const settings = await consultationService.getAvailabilitySettings();
+				setAvailabilitySettings(settings);
+			} catch (error) {
+				console.error("Error fetching availability settings:", error);
+				toast.error("Failed to load availability settings. Using defaults.");
+				// Set default settings
+				setAvailabilitySettings({
+					id: "default",
+					weekdays: [1, 2, 3, 4, 5], // Monday to Friday
+					timeSlots: [
+						{ startTime: "09:00", endTime: "12:00" },
+						{ startTime: "13:00", endTime: "17:00" },
+					],
+					consultationDuration: 60,
+					bufferTime: 15,
+					excludedDates: [],
+					maxDaysInAdvance: 30,
+					updatedAt: new Date(),
+				});
+			} finally {
+				setSettingsLoading(false);
+			}
+		};
+
+		fetchSettings();
+	}, []);
+
 	// Load available time slots when a date is selected
 	useEffect(() => {
-		if (!selectedDate) return;
+		if (!selectedDate || !availabilitySettings) return;
 
-		const fetchTimeSlots = async () => {
+		const generateTimeSlots = () => {
 			const today = new Date();
 			today.setHours(0, 0, 0, 0);
 
@@ -127,28 +160,80 @@ const BookConsultationPage = () => {
 
 			setTimeSlotsLoading(true);
 			setIsSelectedTodayDate(false);
-			try {
-				// Format date as YYYY-MM-DD
-				const formattedDate = format(selectedDate, "yyyy-MM-dd");
-				const slots = await consultationService.getAvailableSlots(formattedDate);
-				setAvailableSlots(slots);
 
-				// Set the date in the form
+			try {
+				const formattedDate = format(selectedDate, "yyyy-MM-dd");
+				const dayOfWeek = selectedDate.getDay();
+
+				// Check if the selected date is excluded
+				if (availabilitySettings.excludedDates.includes(formattedDate)) {
+					setAvailableSlots([]);
+					toast.info("This date is not available for consultations. Please select another date.");
+					form.setValue("date", selectedDate);
+					return;
+				}
+
+				// Check if the day of week is available
+				if (!availabilitySettings.weekdays.includes(dayOfWeek)) {
+					setAvailableSlots([]);
+					toast.info("Consultations are not available on this day of the week. Please select another date.");
+					form.setValue("date", selectedDate);
+					return;
+				}
+
+				// Generate time slots based on availability settings
+				const generatedSlots: TimeSlot[] = [];
+				let slotId = 0;
+
+				availabilitySettings.timeSlots.forEach((range) => {
+					const [startHour, startMin] = range.startTime.split(":").map(Number);
+					const [endHour, endMin] = range.endTime.split(":").map(Number);
+
+					const rangeStartMinutes = startHour * 60 + startMin;
+					const rangeEndMinutes = endHour * 60 + endMin;
+					const totalSlotDuration = availabilitySettings.consultationDuration + availabilitySettings.bufferTime;
+
+					let currentMinutes = rangeStartMinutes;
+
+					while (currentMinutes + availabilitySettings.consultationDuration <= rangeEndMinutes) {
+						const slotStartHour = Math.floor(currentMinutes / 60);
+						const slotStartMin = currentMinutes % 60;
+
+						const slotEndMinutes = currentMinutes + availabilitySettings.consultationDuration;
+						const slotEndHour = Math.floor(slotEndMinutes / 60);
+						const slotEndMin = slotEndMinutes % 60;
+
+						const startTime = `${String(slotStartHour).padStart(2, "0")}:${String(slotStartMin).padStart(2, "0")}`;
+						const endTime = `${String(slotEndHour).padStart(2, "0")}:${String(slotEndMin).padStart(2, "0")}`;
+
+						generatedSlots.push({
+							id: `slot-${slotId++}`,
+							startTime,
+							endTime,
+							available: true,
+							day: formattedDate,
+						});
+
+						currentMinutes += totalSlotDuration;
+					}
+				});
+
+				setAvailableSlots(generatedSlots);
 				form.setValue("date", selectedDate);
 
-				if (slots.length === 0) {
+				if (generatedSlots.length === 0) {
 					toast.info("No available time slots for this date. Please select another date.");
 				}
 			} catch (error) {
-				console.error("Error fetching time slots:", error);
-				toast.error("Failed to load available time slots. Please try again.");
+				console.error("Error generating time slots:", error);
+				toast.error("Failed to generate time slots. Please try again.");
 			} finally {
 				setTimeSlotsLoading(false);
 			}
 		};
 
-		fetchTimeSlots();
-	}, [selectedDate, form]);
+		generateTimeSlots();
+	}, [selectedDate, availabilitySettings, form]);
 
 	// Function to handle time slot selection
 	const handleTimeSlotSelect = (slot: TimeSlot) => {
@@ -325,8 +410,13 @@ const BookConsultationPage = () => {
 							</CardHeader>
 
 							<CardContent className="p-4 md:p-6">
-								<Form {...form}>
-									<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+								{settingsLoading ? (
+									<div className="flex items-center justify-center py-12">
+										<Loader2 className="h-8 w-8 animate-spin text-primary" />
+									</div>
+								) : (
+									<Form {...form}>
+										<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 										{formStep === 1 ? (
 											<>
 												{/* Step 1: Date & Time Selection */}
@@ -338,10 +428,28 @@ const BookConsultationPage = () => {
 															selected={selectedDate}
 															onSelect={setSelectedDate}
 															disabled={(date) => {
-																// Disable past dates, weekends, or other excluded dates
+																// Disable past dates
 																const now = new Date();
 																now.setHours(0, 0, 0, 0);
-																return date < now || date.getDay() === 0 || date.getDay() === 6;
+																if (date < now) return true;
+
+																// If settings not loaded yet, only disable past dates
+																if (!availabilitySettings) return false;
+
+																// Check if date exceeds max days in advance
+																const maxDate = new Date();
+																maxDate.setDate(maxDate.getDate() + availabilitySettings.maxDaysInAdvance);
+																if (date > maxDate) return true;
+
+																// Check if date is in excluded dates
+																const formattedDate = format(date, "yyyy-MM-dd");
+																if (availabilitySettings.excludedDates.includes(formattedDate)) return true;
+
+																// Check if day of week is available
+																const dayOfWeek = date.getDay();
+																if (!availabilitySettings.weekdays.includes(dayOfWeek)) return true;
+
+																return false;
 															}}
 															className="rounded-md border mt-2"
 														/>
@@ -563,6 +671,7 @@ const BookConsultationPage = () => {
 										)}
 									</form>
 								</Form>
+								)}
 							</CardContent>
 						</Card>
 					</div>

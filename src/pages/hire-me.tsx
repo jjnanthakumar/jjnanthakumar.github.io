@@ -1,7 +1,9 @@
 "use client";
 
 import PowerfulCTACard from "@/components/cards/powerful-cta-card";
+import { QuickContactCTA } from "@/components/cta/quick-contact-cta";
 import { SEO } from "@/components/common/seo";
+import { StatsSection } from "@/components/stats/stats-section";
 import {
 	Accordion,
 	AccordionContent,
@@ -181,6 +183,7 @@ const hireFormSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
 	email: z.string().min(1, { message: "Email is required" }).email("Invalid email address"),
 	company: z.string().optional(),
+	websiteUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
 	serviceType: z.string().min(1, { message: "Please select a service type" }),
 	budget: z.string().min(1, { message: "Please select a budget range" }),
 	timeframe: z.string().min(1, { message: "Please select a timeframe" }),
@@ -201,10 +204,10 @@ const timeframes = [
 
 const budgetRanges = [
 	{ id: "under-1000", label: "Under $1,000" },
-	{ id: "1000-5000", label: "$ 1,000 - $ 5,000" },
-	{ id: "5000-10000", label: "$ 5,000 - $ 10,000" },
-	{ id: "10000-plus", label: "$ 10,000+" },
-	{ id: "hourly", label: "Hourly rate" },
+	{ id: "1000-3000", label: "$1,000 - $3,000" },
+	{ id: "3000-5000", label: "$3,000 - $5,000" },
+	{ id: "5000-10000", label: "$5,000 - $10,000" },
+	{ id: "above-10000", label: "Above $10,000" },
 ];
 
 const HireMePage = () => {
@@ -219,6 +222,7 @@ const HireMePage = () => {
 			name: "",
 			email: "",
 			company: "",
+			websiteUrl: "",
 			serviceType: "",
 			budget: "",
 			timeframe: "",
@@ -233,6 +237,7 @@ const HireMePage = () => {
 				name: data.name,
 				email: data.email,
 				company: data.company || undefined,
+				websiteUrl: data.websiteUrl || undefined,
 				serviceType: data.serviceType,
 				budget: data.budget,
 				timeframe: data.timeframe,
@@ -354,6 +359,11 @@ const HireMePage = () => {
 				</div>
 			</section>
 
+			{/* Stats Section */}
+			<section className="container px-4 max-w-6xl mx-auto">
+				<StatsSection />
+			</section>
+
 			{/* Availability Section */}
 			<section className="py-12 bg-muted/30">
 				<div className="container px-4 max-w-6xl mx-auto">
@@ -365,7 +375,7 @@ const HireMePage = () => {
 								spot.
 							</p>
 
-							<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+							{/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 								{availabilitySlots.map((slot) => (
 									<div
 										key={`${slot.month}-${slot.year}`}
@@ -388,13 +398,13 @@ const HireMePage = () => {
 										</Badge>
 									</div>
 								))}
-							</div>
+							</div> */}
 						</div>
 
 						<div className="md:w-1/2 flex flex-col items-center md:items-end">
 							<div className="flex items-center gap-2 mb-4">
 								<Clock size={20} className="text-primary" />
-								<span className="font-medium">Timezone: UTC+07:00 (WIB)</span>
+								<span className="font-medium">Timezone: UTC+05:30 (IST)</span>
 							</div>
 
 							<Button size="lg" className="rounded-full px-8 w-full md:w-auto" asChild>
@@ -767,6 +777,27 @@ const HireMePage = () => {
 										)}
 									/>
 
+									<FormField
+										control={form.control}
+										name="websiteUrl"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel className="text-foreground/80 font-medium">
+													Website URL (Optional)
+												</FormLabel>
+												<FormControl>
+													<Input
+														placeholder="https://yourwebsite.com"
+														type="url"
+														className="rounded-xl border-border/50 focus-visible:ring-primary/30 bg-background/80 backdrop-blur-sm"
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+
 									<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 										<FormField
 											control={form.control}
@@ -960,6 +991,9 @@ const HireMePage = () => {
 					<PowerfulCTACard {...ctaData} />
 				</div>
 			</section>
+
+			{/* Quick Contact CTA */}
+			<QuickContactCTA />
 		</div>
 	);
 };

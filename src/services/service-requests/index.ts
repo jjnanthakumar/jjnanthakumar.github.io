@@ -14,10 +14,13 @@ import {
 	type DocumentData,
 	type QueryDocumentSnapshot,
 } from "firebase/firestore";
+import { leadScoringService } from "../lead-scoring";
 import { BaseService } from "../core/base-service";
 import { ServiceRequest } from "./types";
 
-export type NewServiceRequest = Omit<ServiceRequest, "id" | "status" | "createdAt">;
+export type NewServiceRequest = Omit<ServiceRequest, "id" | "status" | "createdAt" | "leadScore" | "priority" | "scoreBreakdown" | "recommendations"> & {
+	websiteUrl?: string;
+};
 
 export class ServiceRequestService extends BaseService {
 	private readonly collectionName = "serviceRequests";
@@ -34,8 +37,13 @@ export class ServiceRequestService extends BaseService {
 			budget: data.budget || "",
 			timeframe: data.timeframe || "",
 			projectDetails: data.projectDetails || "",
+			websiteUrl: data.websiteUrl || "",
 			status: data.status || "new",
 			createdAt: this.convertTimestampToDate(data.createdAt) || new Date(),
+			leadScore: data.leadScore || 0,
+			priority: data.priority || "cold",
+			scoreBreakdown: data.scoreBreakdown || {},
+			recommendations: data.recommendations || [],
 		};
 	}
 
@@ -103,11 +111,33 @@ export class ServiceRequestService extends BaseService {
 
 	async submit(data: NewServiceRequest): Promise<string> {
 		try {
-			const docRef = await addDoc(collection(this.db, this.collectionName), {
+			// Calculate lead score
+			const leadScore = leadScoringService.calculateScore({
+				email: data.email,
+				budget: data.budget,
+				projectType: data.serviceType,
+				timeline: data.timeframe,
+				companyName: data.company,
+				websiteUrl: data.websiteUrl,
+				message: data.projectDetails,
+			});
+
+			// Save with score
+			const enrichedRequest = {
 				...data,
 				status: "new",
+				leadScore: leadScore.totalScore,
+				priority: leadScore.priority,
+				scoreBreakdown: leadScore.breakdown,
+				recommendations: leadScore.recommendations,
 				createdAt: Timestamp.now(),
-			});
+			};
+
+			const docRef = await addDoc(collection(this.db, this.collectionName), enrichedRequest);
+
+			console.log(
+				`New ${leadScore.priority.toUpperCase()} priority lead submitted - Score: ${leadScore.totalScore}/100`,
+			);
 
 			return docRef.id;
 		} catch (error) {

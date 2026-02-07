@@ -1,6 +1,8 @@
 import PowerfulCTACard from "@/components/cards/powerful-cta-card";
 import { ProjectCard } from "@/components/cards/project-card";
 import { SEO } from "@/components/common/seo";
+import { QuickContactCTA } from "@/components/cta/quick-contact-cta";
+import { StatsSection } from "@/components/stats/stats-section";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
 import { services } from "@/data/services";
@@ -97,7 +99,10 @@ const Home = () => {
 						</div>
 					</div>
 				</section>
-
+				{/* Stats Section */}
+				<section className="container px-4 max-w-6xl mx-auto">
+					<StatsSection />
+				</section>
 				<section className="py-24 relative overflow-hidden">
 					<div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
 					<div className="container px-4 max-w-6xl mx-auto">
@@ -161,17 +166,17 @@ const Home = () => {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 							{isProjectsLoading
 								? // Loading placeholders
-									Array.from({ length: 3 }).map((_, i) => (
-										<div key={i} className="bg-muted/30 h-[420px] rounded-xl animate-pulse" />
-									))
+								Array.from({ length: 3 }).map((_, i) => (
+									<div key={i} className="bg-muted/30 h-[420px] rounded-xl animate-pulse" />
+								))
 								: projects.map((project, index) => (
-										<ProjectCard
-											key={project.id}
-											project={project}
-											className="animate-fade-in"
-											style={{ animationDelay: `${index * 0.1}s` }}
-										/>
-									))}
+									<ProjectCard
+										key={project.id}
+										project={project}
+										className="animate-fade-in"
+										style={{ animationDelay: `${index * 0.1}s` }}
+									/>
+								))}
 						</div>
 
 						<div className="mt-16 text-center">
@@ -193,6 +198,8 @@ const Home = () => {
 						<PowerfulCTACard {...ctaData} />
 					</div>
 				</section>
+				{/* Quick Contact CTA */}
+				<QuickContactCTA />
 			</div>
 		</>
 	);

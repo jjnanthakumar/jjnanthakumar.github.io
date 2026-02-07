@@ -10,6 +10,7 @@ const FormCertification = lazy(() => import("@/pages/cms/certifications/form-cer
 const CmsCertifications = lazy(() => import("@/pages/cms/certifications/list-certification"));
 const CmsContacts = lazy(() => import("@/pages/cms/contacts/list-contact"));
 const CmsServices = lazy(() => import("@/pages/cms/services/list-service"));
+const CmsLeads = lazy(() => import("@/pages/cms/leads"));
 const CmsConsultations = lazy(() => import("@/pages/cms/consultations/list-consultations"));
 const CmsConsultationSettings = lazy(() => import("@/pages/cms/consultations/settings"));
 const CmsInvoices = lazy(() => import("@/pages/cms/invoices/list-invoice"));
@@ -31,6 +32,7 @@ const CmsRoutes = () => {
 				<Route path="/certifications/form/:id" element={<FormCertification />} />
 				<Route path="/contacts" element={<CmsContacts />} />
 				<Route path="/services" element={<CmsServices />} />
+				<Route path="/leads" element={<CmsLeads />} />
 				<Route path="/consultations" element={<CmsConsultations />} />
 				<Route path="/consultations/settings" element={<CmsConsultationSettings />} />
 				<Route path="/invoices" element={<CmsInvoices />} />

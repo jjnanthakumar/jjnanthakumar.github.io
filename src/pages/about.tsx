@@ -65,7 +65,7 @@ const About = () => {
 							<div className="mt-6 flex flex-wrap gap-3 justify-center">
 								<div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-medium">
 									<Calendar size={16} />
-									4+ Years Experience
+									5+ Years Experience
 								</div>
 								<div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 text-green-500 font-medium">
 									<CheckCircle size={16} />

@@ -142,28 +142,30 @@ export class ConsultationService extends BaseService {
 
   async createBooking(data: NewConsultationBooking): Promise<string> {
     try {
-      // First, check if the time slot is available
-      const timeSlotQuery = query(
-        collection(this.db, this.timeSlotsCollection),
-        where("day", "==", data.date),
-        where("startTime", "==", data.timeSlot.startTime),
-        where("endTime", "==", data.timeSlot.endTime),
-        where("available", "==", true)
-      );
+      // Basic validation: Check if date is in the future
+      const bookingDate = new Date(data.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       
-      const timeSlotSnapshot = await getDocs(timeSlotQuery);
-      
-      if (timeSlotSnapshot.empty) {
-        throw new Error("The selected time slot is no longer available.");
+      if (bookingDate < today) {
+        throw new Error("Cannot book consultations for past dates.");
       }
       
-      // Mark the time slot as unavailable
-      const timeSlotDoc = timeSlotSnapshot.docs[0];
-      await updateDoc(doc(this.db, this.timeSlotsCollection, timeSlotDoc.id), {
-        available: false
-      });
+      // Fetch availability settings to validate against them
+      const settings = await this.getAvailabilitySettings();
       
-      // Create the booking
+      // Check if date is excluded
+      if (settings.excludedDates.includes(data.date)) {
+        throw new Error("This date is not available for consultations.");
+      }
+      
+      // Check if day of week is available
+      const dayOfWeek = bookingDate.getDay();
+      if (!settings.weekdays.includes(dayOfWeek)) {
+        throw new Error("Consultations are not available on this day of the week.");
+      }
+      
+      // Create the booking without checking consultationTimeSlots collection
       const docRef = await addDoc(collection(this.db, this.bookingsCollection), {
         ...data,
         status: "pending",
