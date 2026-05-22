@@ -1,6 +1,7 @@
 import {
 	addDoc,
 	collection,
+	deleteField,
 	doc,
 	DocumentData,
 	getDoc,
@@ -182,7 +183,9 @@ export class ProjectService extends BaseService {
 	async create(project: NewProject): Promise<string> {
 		try {
 			const now = Timestamp.now();
-			const projectData = {
+			
+			// Build project data, excluding empty string fields
+			const projectData: Record<string, any> = {
 				...project,
 				views: 0,
 				likes: 0,
@@ -190,6 +193,18 @@ export class ProjectService extends BaseService {
 				updatedAt: now,
 				publishedDate: project.isPublished ? now : null,
 			};
+
+			// Remove empty image, demoUrl, and repoUrl fields
+			if (!projectData.image || projectData.image === "") {
+				delete projectData.image;
+			}
+			if (!projectData.demoUrl || projectData.demoUrl === "") {
+				delete projectData.demoUrl;
+			}
+			if (!projectData.repoUrl || projectData.repoUrl === "") {
+				delete projectData.repoUrl;
+			}
+
 			const docRef = await addDoc(collection(this.db, this.collectionName), projectData);
 			return docRef.id;
 		} catch (error) {
@@ -201,11 +216,35 @@ export class ProjectService extends BaseService {
 		try {
 			const projectRef = doc(this.db, this.collectionName, id);
 			const now = Timestamp.now();
-			const updateData = {
+			
+			// Prepare base update data
+			const updateData: Record<string, any> = {
 				...project,
 				updatedAt: now,
 				...(project.isPublished && !project.publishedDate ? { publishedDate: now } : {}),
 			};
+
+			// Handle image - remove field if empty/null
+			if (project.image !== undefined) {
+				if (!project.image || project.image === "") {
+					updateData.image = deleteField();
+				}
+			}
+
+			// Handle demoUrl - remove field if empty/null
+			if (project.demoUrl !== undefined) {
+				if (!project.demoUrl || project.demoUrl === "") {
+					updateData.demoUrl = deleteField();
+				}
+			}
+
+			// Handle repoUrl - remove field if empty/null
+			if (project.repoUrl !== undefined) {
+				if (!project.repoUrl || project.repoUrl === "") {
+					updateData.repoUrl = deleteField();
+				}
+			}
+
 			await updateDoc(projectRef, updateData);
 		} catch (error) {
 			this.handleError(error, "updating project");

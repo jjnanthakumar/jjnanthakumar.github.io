@@ -65,6 +65,10 @@ const TOPICS = [
 	"Other",
 ];
 
+// Business hours configuration (24-hour format)
+const BUSINESS_HOURS_START = "09:00";
+const BUSINESS_HOURS_END = "17:00";
+
 const PLEASE_SELECT_DATE_FIRST = "Please select a date first.";
 const CANNOT_BOOK_FOR_TODAY = "Cannot book consultations for today. Please select a future date.";
 const BOOKING_CARD_ID = "booking-card";
@@ -88,6 +92,32 @@ const bookingSchema = z.object({
 });
 
 type BookingFormValues = z.infer<typeof bookingSchema>;
+
+/**
+ * Helper function to check if a time slot is outside business hours
+ * @param startTime - Start time in HH:MM format
+ * @param dayOfWeek - Day of the week (0=Sunday, 6=Saturday)
+ * @returns true if the slot is outside business hours
+ */
+const isOutsideBusinessHours = (startTime: string, dayOfWeek: number): boolean => {
+	// Weekends (Saturday=6, Sunday=0) are always outside business hours
+	if (dayOfWeek === 0 || dayOfWeek === 6) {
+		return true;
+	}
+
+	// For weekdays, check if the time is before or after business hours
+	const [hour, minute] = startTime.split(":").map(Number);
+	const slotTimeInMinutes = hour * 60 + minute;
+
+	const [businessStartHour, businessStartMin] = BUSINESS_HOURS_START.split(":").map(Number);
+	const businessStartMinutes = businessStartHour * 60 + businessStartMin;
+
+	const [businessEndHour, businessEndMin] = BUSINESS_HOURS_END.split(":").map(Number);
+	const businessEndMinutes = businessEndHour * 60 + businessEndMin;
+
+	// Outside business hours if before 9 AM or at/after 5 PM
+	return slotTimeInMinutes < businessStartMinutes || slotTimeInMinutes >= businessEndMinutes;
+};
 
 const BookConsultationPage = () => {
 	const navigate = useNavigate();
@@ -218,11 +248,20 @@ const BookConsultationPage = () => {
 					}
 				});
 
-				setAvailableSlots(generatedSlots);
+				// Filter slots to only include those outside business hours
+				const filteredSlots = generatedSlots.filter((slot) => 
+					isOutsideBusinessHours(slot.startTime, dayOfWeek)
+				);
+
+				setAvailableSlots(filteredSlots);
 				form.setValue("date", selectedDate);
 
-				if (generatedSlots.length === 0) {
-					toast.info("No available time slots for this date. Please select another date.");
+				if (filteredSlots.length === 0) {
+					if (generatedSlots.length > 0) {
+						toast.info("Only slots outside business hours (before 9 AM, after 5 PM, or weekends) are available. Please select another date or time.");
+					} else {
+						toast.info("No available time slots for this date. Please select another date.");
+					}
 				}
 			} catch (error) {
 				console.error("Error generating time slots:", error);
@@ -387,12 +426,27 @@ const BookConsultationPage = () => {
 									</div>
 								</div>
 							</CardContent>
-							<CardFooter className="bg-primary/5 border-t border-border/50 flex flex-col items-start p-6">
+						<CardFooter className="bg-primary/5 border-t border-border/50 flex flex-col items-start p-6 space-y-4">
+							<div>
 								<h3 className="text-sm font-medium mb-2 flex items-center gap-2">
 									<CalendarClock className="h-4 w-4" />
 									Consultation Length
 								</h3>
 								<p className="text-sm text-muted-foreground">30 minutes, with time for questions</p>
+							</div>
+							<div className="w-full pt-4 border-t border-border/50">
+								<h3 className="text-sm font-medium mb-2 flex items-center gap-2">
+									<Clock className="h-4 w-4" />
+									Available Hours
+								</h3>
+								<p className="text-sm text-muted-foreground">
+									Consultations are available outside business hours only:
+								</p>
+								<ul className="text-sm text-muted-foreground mt-2 space-y-1">
+									<li>• Weekdays: Before 9 AM or after 5 PM</li>
+									<li>• Weekends: Anytime</li>
+								</ul>
+							</div>
 							</CardFooter>
 						</Card>
 					</div>

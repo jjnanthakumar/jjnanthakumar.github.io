@@ -151,7 +151,8 @@ const FormProject = () => {
 				.map(tech => tech.trim())
 				.filter(tech => tech.length > 0);
 
-			const imageUrl = data.image || currentProject?.image || "";
+			// Use the form data directly - don't fall back to old values
+			const imageUrl = data.image || "";
 			const readingTime = calculateReadingTime(data.description);
 
 			if (isEditMode && id) {
@@ -161,8 +162,8 @@ const FormProject = () => {
 					description: data.description,
 					image: imageUrl,
 					technologies: techList,
-					demoUrl: data.demoUrl || null,
-					repoUrl: data.repoUrl || null,
+					demoUrl: data.demoUrl || "",
+					repoUrl: data.repoUrl || "",
 					readingTime,
 					isPublished: data.isPublished,
 					isFeatured: data.isFeatured,
@@ -185,8 +186,8 @@ const FormProject = () => {
 					isFeatured: data.isFeatured,
 					publishedDate: data.isPublished ? Timestamp.now() : null,
 					technologies: techList,
-					demoUrl: data.demoUrl || null,
-					repoUrl: data.repoUrl || null,
+					demoUrl: data.demoUrl || "",
+					repoUrl: data.repoUrl || "",
 					views: 0,
 					likes: 0,
 					readingTime,
